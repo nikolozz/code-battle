@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { WebsocketService } from '../websocket/websocket.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class HomeService {
   public isChallengeStarted?: boolean;
 
-  constructor(private readonly webSocketService: WebsocketService) { }
+  constructor(private readonly webSocketService: WebsocketService) {}
 
   public startChallenge() {
     this.webSocketService.emit('startChallenge', 'empty');

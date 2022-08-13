@@ -1,7 +1,7 @@
 {
   "projectType": "library",
   "sourceRoot": "libs/ui/src",
-  "prefix": "code-battle",
+  "prefix": "code",
   "targets": {
     "test": {
       "executor": "@nrwl/jest:jest",
