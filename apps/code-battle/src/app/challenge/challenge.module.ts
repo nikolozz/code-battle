@@ -2,14 +2,14 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
+import { UiModule } from '@code-battle/ui';
+import { CdTimerModule } from 'angular-cd-timer';
+import { ChallengeRoutingModule } from './challenge-routing.module';
+import { WebsocketModule } from '../websocket/websocket.module';
+
 import { ChallengeComponent } from './challenge.component';
 import { ChallengeTaskComponent } from './challenge-task/challenge-task.component';
 import { ChallengeTestCaseComponent } from './challenge-task/challenge-test-case/challenge-test-case.component';
-import { CdTimerModule } from 'angular-cd-timer';
-import { WebsocketModule } from '../websocket/websocket.module';
-import { SharedModule } from '../shared/shared.module';
-import { CodeEditorModule } from '../code-editor/code-editor.module';
-import { ChallengeRoutingModule } from './challenge-routing.module';
 
 @NgModule({
   declarations: [
@@ -21,10 +21,9 @@ import { ChallengeRoutingModule } from './challenge-routing.module';
     CommonModule,
     FormsModule,
     CdTimerModule,
+    ChallengeRoutingModule,
+    UiModule,
     WebsocketModule,
-    SharedModule,
-    CodeEditorModule,
-    ChallengeRoutingModule
   ],
 })
-export class ChallengeModule { }
+export class ChallengeModule {}

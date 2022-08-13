@@ -9,11 +9,8 @@ const config: SocketIoConfig = { url: environment.WEBSOCKET_URL };
 
 @NgModule({
   declarations: [],
-  imports: [
-    CommonModule,
-    SocketIoModule.forRoot(config),
-  ],
+  imports: [CommonModule, SocketIoModule.forRoot(config)],
   providers: [WebsocketService],
-  exports: [SocketIoModule]
+  exports: [SocketIoModule],
 })
-export class WebsocketModule { }
+export class WebsocketModule {}

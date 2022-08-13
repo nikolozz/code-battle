@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@code-battle/ui": ["libs/ui/src/index.ts"]
+      "@code-battle/ui": ["libs/ui/src/index.ts"],
+      "rxjs": ["node_modules/rxjs"]
     }
   },
   "exclude": ["node_modules", "tmp"]

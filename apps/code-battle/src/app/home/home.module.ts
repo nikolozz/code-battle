@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SharedModule } from '../shared/shared.module';
 import { HomeComponent } from './home.component';
+
+import { UiModule } from '@code-battle/ui';
+
+import { WebsocketModule } from '../websocket/websocket.module';
 
 @NgModule({
   declarations: [HomeComponent],
-  imports: [
-    CommonModule,
-    SharedModule
-  ],
+  imports: [CommonModule, UiModule, WebsocketModule],
 })
-export class HomeModule { }
+export class HomeModule {}
