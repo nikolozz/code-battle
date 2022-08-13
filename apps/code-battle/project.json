@@ -1,11 +1,13 @@
 {
   "projectType": "application",
   "sourceRoot": "apps/code-battle/src",
-  "prefix": "code-battle",
+  "prefix": "code",
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/code-battle",
         "index": "apps/code-battle/src/index.html",
@@ -13,10 +15,18 @@
         "polyfills": "apps/code-battle/src/polyfills.ts",
         "tsConfig": "apps/code-battle/tsconfig.app.json",
         "assets": [
+          {
+            "glob": "**/*",
+            "input": "../../node_modules/ace-builds/src/",
+            "output": "/"
+          },
           "apps/code-battle/src/favicon.ico",
           "apps/code-battle/src/assets"
         ],
-        "styles": ["apps/code-battle/src/styles.css"],
+        "styles": [
+          "apps/code-battle/src/styles.css",
+          "node_modules/bootstrap/dist/css/bootstrap.min.css"
+        ],
         "scripts": []
       },
       "configurations": {
@@ -81,7 +91,9 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/code-battle"],
+      "outputs": [
+        "coverage/apps/code-battle"
+      ],
       "options": {
         "jestConfig": "apps/code-battle/jest.config.ts",
         "passWithNoTests": true

@@ -1,0 +1,15 @@
+<div class="backdrop" (click)="onClose()"></div>
+
+<div class="alert-box">
+  <p>{{ message }}</p>
+  <div *ngIf="!isResponseModal; else response" class="alert-box-actions">
+    <button class="btn btn-primary" (click)="onClose()">Close</button>
+  </div>
+  <ng-template #response>
+    <div class="alert-box-actions">
+      <button class="btn btn-success" (click)="onAccept()">Accept</button>
+      <button class="btn btn-danger" (click)="onReject()">Deny</button>
+    </div>
+  </ng-template>
+
+</div>

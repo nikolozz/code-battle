@@ -2,7 +2,9 @@
   "$schema": "./node_modules/nx/schemas/workspace-schema.json",
   "version": 2,
   "projects": {
+    "api": "apps/api",
     "code-battle": "apps/code-battle",
-    "code-battle-e2e": "apps/code-battle-e2e"
+    "code-battle-e2e": "apps/code-battle-e2e",
+    "ui": "libs/ui"
   }
 }

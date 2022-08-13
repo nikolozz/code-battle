@@ -1,0 +1,13 @@
+.timer {
+  margin-top: 10%;
+  font-size: 32px;
+}
+
+.board-buttons {
+  text-align: left;
+  padding-top: 5%;
+}
+
+.board-buttons>div:nth-child(2) {
+  margin-left: 2%;
+}

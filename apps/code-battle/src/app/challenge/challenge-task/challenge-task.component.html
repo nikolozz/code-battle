@@ -1,0 +1,12 @@
+<div class="row challenge-box">
+  <div class="col-md-8 align-self-start">
+    <p class="text-dark">{{challenge}}</p>
+  </div>
+
+  <div class="col-md-8 align-self-end">
+    <ul class="list-group">
+      <code-challenge-test-case [isPassed]="testCase.status" [testCase]="testCase.testCase" *ngFor="let testCase of testCases">
+      </code-challenge-test-case>
+    </ul>
+  </div>
+</div>

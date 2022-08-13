@@ -1,0 +1,16 @@
+<div style="margin-top: 20%;">
+  <div *ngIf="loading; else content">
+    <p class="text-dark">Looking for a opponent</p>
+    <code-loader></code-loader>
+  </div>
+
+  <ng-template #content>
+    <button *ngIf="!invited; else alertBlock" (click)="onStartChallenge()" type="button"
+      class="btn btn-primary btn-lg">Start</button>
+
+    <ng-template #alertBlock>
+      <code-alert *ngIf="!loading" [isResponseModal]="true" (closeAlert)="onCloseAlert()" (accept)="onAcceptChallenge()"
+        (reject)="onCloseAlert()" message='User#1 Challenged You!'></code-alert>
+    </ng-template>
+  </ng-template>
+</div>
