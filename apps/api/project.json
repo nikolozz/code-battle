@@ -33,7 +33,9 @@
       },
       "configurations": {
         "production": {
-          "buildTarget": "api:build:production"
+          "buildTarget": "api:build:production",
+          "runtimeArgs": ["-r", "dotenv/config"],
+          "args": ["dotenv_config_path=./apps/admin/.env"]
         }
       }
     },
