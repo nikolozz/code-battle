@@ -17,8 +17,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly homeService: HomeService,
-    private readonly router: Router,
-  ) { }
+    private readonly router: Router
+  ) {}
 
   ngOnInit(): void {
     this.getInviteSubscription = this.homeService
