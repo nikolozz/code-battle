@@ -1,5 +1,5 @@
+import { User } from '@code-battle/api-types';
 import { DBUser } from '../entities';
-import { User } from './user.interface';
 
 export interface UserRepository {
   getById(id: number): Promise<DBUser | null>;

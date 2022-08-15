@@ -1,8 +1,8 @@
+import { User as BaseUser } from '@code-battle/api-types';
 import { Exclude } from 'class-transformer';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { Roles } from '../enums';
 
-import { User as BaseUser } from '../interfaces';
 
 export type DBUser = Omit<BaseUser, 'id'> & {
   roles: Roles[];

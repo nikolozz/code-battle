@@ -1,11 +1,11 @@
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { DBUser } from './entities';
-import { User } from './interfaces';
 import { UserRepository } from './interfaces/user-repository.interface';
 import UserEntity from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { Roles } from './enums';
+import { User } from '@code-battle/api-types';
 
 export class UserRepositoryImpl implements UserRepository {
   constructor(

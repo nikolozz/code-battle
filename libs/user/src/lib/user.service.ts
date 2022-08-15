@@ -1,10 +1,10 @@
+import { User } from '@code-battle/api-types';
 import { Inject, Injectable } from '@nestjs/common';
 import * as argon from 'argon2';
 
 import { USER_REPOSITORY_TOKEN } from './constants';
 import { DBUser } from './entities';
 import { Roles } from './enums';
-import { User } from './interfaces';
 import { UserRepository } from './interfaces/user-repository.interface';
 
 @Injectable()

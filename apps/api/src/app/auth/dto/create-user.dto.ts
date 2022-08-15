@@ -1,3 +1,4 @@
+import { UserSignUp } from '@code-battle/api-types';
 import {
   IsEmail,
   IsNotEmpty,
@@ -6,7 +7,7 @@ import {
   MinLength,
 } from 'class-validator';
 
-export class CreateUserDto {
+export class CreateUserDto implements UserSignUp {
   @IsNotEmpty()
   @IsEmail()
   email: string;

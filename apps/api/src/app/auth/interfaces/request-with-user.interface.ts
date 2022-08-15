@@ -1,4 +1,4 @@
-import { User } from '@code-battle/user';
+import { User } from '@code-battle/api-types';
 import { Request } from 'express';
 
 export interface RequestWithUser extends Request {

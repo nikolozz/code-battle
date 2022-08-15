@@ -1,5 +1,6 @@
-import { AuthService } from '@code-battle/auth';
-import { User, UserService } from '@code-battle/user';
+import { User } from '@code-battle/api-types';
+import { AuthService, JwtRefreshGuard } from '@code-battle/auth';
+import { UserService } from '@code-battle/user';
 import {
   Body,
   ClassSerializerInterceptor,
@@ -76,8 +77,8 @@ export class AuthController {
     return user;
   }
 
-  @Get('refresh')
-  @UseGuards(AuthGuard('jwt-refresh-token'))
+  @Get('refresh-token')
+  @UseGuards(JwtRefreshGuard)
   async refresh(@Req() request: RequestWithUser) {
     const accessTokenCookie = await this.authenticationService.getCookieWithJwtToken(
       request.user.id
