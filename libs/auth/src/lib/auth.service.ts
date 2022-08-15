@@ -55,7 +55,7 @@ export class AuthService {
   ): Promise<User | null> {
     const user = await this.userService.getByEmail(email);
 
-    this.validatePassword(password, user.password);
+    await this.validatePassword(password, user.password);
 
     return user;
   }
@@ -109,18 +109,6 @@ export class AuthService {
       cookie,
       token,
     };
-  }
-
-  public getUserFromCookie(authenticationToken: string): Promise<DBUser> {
-    const payload: JwtTokenPayload = this.jwtService.verify(
-      authenticationToken,
-      {
-        secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
-      }
-    );
-    if (payload?.userId) {
-      return this.userService.getById(payload?.userId);
-    }
   }
 
   public getCookieForLogOut(): string[] {

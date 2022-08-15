@@ -24,8 +24,6 @@ export class UserService {
   ): Promise<DBUser | null> {
     const user = await this.getById(userId);
 
-    console.log(user.hashedRefreshToken, refreshToken);
-
     const isRefreshTokenMatch = await argon.verify(
       user.hashedRefreshToken,
       refreshToken
