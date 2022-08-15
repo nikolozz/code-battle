@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { LoginComponent } from './login/login.component';
+import { LoginComponent, RegisterComponent } from '@code-battle/ui';
 import { HomeComponent } from './home/home.component';
-import { RegisterComponent } from './register/register.component';
 
 const routes: Routes = [
   {
@@ -15,7 +14,7 @@ const routes: Routes = [
     component: HomeComponent,
   },
   {
-    path: 'challenge/:id',
+    path: 'challenge',
     loadChildren: () =>
       import('./challenge/challenge-routing.module').then(
         (m) => m.ChallengeRoutingModule

@@ -6,7 +6,7 @@ import { AuthService } from '@code-battle/ui';
 @Component({
   selector: 'code-register',
   templateUrl: './register.component.html',
-  styles: ['.form-group { padding-top: 1rem}'],
+  styleUrls: ['./register.component.css'],
 })
 export class RegisterComponent {
   constructor(

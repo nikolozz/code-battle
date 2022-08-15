@@ -1,13 +1,30 @@
-.timer {
-  margin-top: 10%;
-  font-size: 32px;
+.container {
+  display: flex;
+  margin: auto;
+  width: 80%;
+  height: 80%;
+  justify-content: center;
+  flex-flow: column wrap-reverse;
+  row-gap: 30px;
 }
 
-.board-buttons {
-  text-align: left;
-  padding-top: 5%;
+.challenge {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
 }
 
-.board-buttons>div:nth-child(2) {
-  margin-left: 2%;
+.challenge-editor {
+  min-width: 60%;
+}
+
+.challenge-task {
+  min-width: 30%;
+}
+
+.challenge-buttons {
+  display: flex;
+  flex-direction: row;
+  column-gap: 20px;
 }

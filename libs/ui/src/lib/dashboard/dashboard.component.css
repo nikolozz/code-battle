@@ -1,0 +1,15 @@
+table {
+  width: 100%;
+}
+
+.button-container {
+  padding-top: 24px;
+}
+
+.dashboard {
+  align-items: start;
+  justify-content: center;
+  flex-direction: column;
+  width: 70%;
+  margin-top: 2rem;
+}

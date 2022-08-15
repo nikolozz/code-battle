@@ -1,20 +1,23 @@
-<nav class="navbar navbar-expand-lg n navbar-dark bg-primary">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="#">
-        <img src="/assets/logo.png" width="30" height="30" class="d-inline-block align-top" alt="logo">
-        Coding Battle
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <span>
+      <a mat-button>
+        <img src="/assets/logo.png" width="30" height="30" class="d-inline-block align-middle" alt="logo">
+        CODE BATTLE
       </a>
-    </div>
-    <ul class="nav navbar-nav navbar-right">
-      <!--TODO add ng-template to avoid multi *ngIf-->
-      <li *ngIf="!user" routerLinkActive="active"><a routerLink="/signup" class="text-light">Sign Up</a></li>
-      <li *ngIf="!user" routerLinkActive="active"><a routerLink="/sign-in" class="text-light">Sign In</a></li>
+    </span>
+    <span class="spacer"></span>
 
-      <li *ngIf="user">
-        <p class="text-light">Welcome {{user.username}}</p>
-      </li>
-      <li *ngIf="user"><a class="text-light" (click)="onLogout()" style="cursor: pointer;">Log Out</a></li>
-    </ul>
-  </div>
-</nav>
+    <div *ngIf="!user">
+      <a mat-button color="basic" routerLink="/signup">Register</a>
+      <a mat-button color="basic" routerLink="/sign-in">Login</a>
+    </div>
+
+    <div *ngIf="user">
+      <button mat-button [matMenuTriggerFor]="menu">{{ user.username }}</button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="onLogout()">Log Out</button>
+      </mat-menu>
+    </div>
+  </mat-toolbar-row>
+</mat-toolbar>

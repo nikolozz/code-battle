@@ -7,7 +7,7 @@ import { AuthService } from '../auth.service';
 @Component({
   selector: 'code-header',
   templateUrl: './header.component.html',
-  styles: ['a:link {text-decoration: none; padding: 0 10px}'],
+  styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   public user?: Omit<User, 'password'>;
@@ -35,9 +35,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   public onLogout() {
     this.logoutSub = this.authService.logout().subscribe(() => {
+      this.user = undefined;
+
       localStorage.removeItem('user');
       this.authService.user.next(null);
-      this.router.navigate(['../sing-in']);
+      this.router.navigate(['../home']);
     });
   }
 }

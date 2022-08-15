@@ -5,24 +5,34 @@
   "targets": {
     "build": {
       "executor": "@nrwl/js:tsc",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/libs/api-types",
         "main": "libs/api-types/src/index.ts",
         "tsConfig": "libs/api-types/tsconfig.lib.json",
-        "assets": ["libs/api-types/*.md"]
+        "assets": [
+          "libs/api-types/*.md"
+        ]
       }
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
+      "outputs": [
+        "{options.outputFile}"
+      ],
       "options": {
-        "lintFilePatterns": ["libs/api-types/**/*.ts"]
+        "lintFilePatterns": [
+          "libs/api-types/**/*.ts"
+        ]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/api-types"],
+      "outputs": [
+        "coverage/libs/api-types"
+      ],
       "options": {
         "jestConfig": "libs/api-types/jest.config.ts",
         "passWithNoTests": true

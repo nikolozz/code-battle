@@ -7,7 +7,7 @@ import { AuthService } from '@code-battle/ui';
 @Component({
   selector: 'code-auth',
   templateUrl: './login.component.html',
-  styles: ['.form-group { padding-top: 1rem}'],
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
   constructor(

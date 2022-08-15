@@ -11,10 +11,15 @@ export class AppComponent implements OnInit {
   constructor(private readonly authService: AuthService) {}
 
   public ngOnInit(): void {
-    this.authService.authenticate().subscribe((user) => {
-      if (user) {
-        this.authService.user.next(user);
+    this.authService.authenticate().subscribe(
+      (user) => {
+        if (user) {
+          this.authService.user.next(user);
+        }
+      },
+      () => {
+        return;
       }
-    });
+    );
   }
 }

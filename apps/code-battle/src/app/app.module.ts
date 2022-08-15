@@ -9,11 +9,9 @@ import { AuthInterceptorService, UiModule } from '@code-battle/ui';
 import { AppComponent } from './app.component';
 import { ChallengeModule } from './challenge/challenge.module';
 import { HomeModule } from './home/home.module';
-import { LoginComponent } from './login/login.component';
-import { RegisterComponent } from './register/register.component';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, RegisterComponent],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
