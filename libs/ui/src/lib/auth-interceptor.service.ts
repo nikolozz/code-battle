@@ -21,7 +21,10 @@ export class AuthInterceptorService implements HttpInterceptor {
     req: HttpRequest<unknown>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
-    if (req.url.indexOf('/refresh-token') > -1) {
+    if (
+      req.url.indexOf('/refresh-token') > -1 ||
+      !localStorage.getItem('user')
+    ) {
       return next.handle(req);
     }
 
@@ -39,7 +42,7 @@ export class AuthInterceptorService implements HttpInterceptor {
             catchError((err) => {
               localStorage.removeItem('user');
 
-              this.router.navigate(['../login']);
+              this.router.navigate(['../home']);
 
               return throwError(() => err);
             })
