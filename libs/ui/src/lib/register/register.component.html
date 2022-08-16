@@ -1,0 +1,27 @@
+<div class="parent">
+  <mat-progress-spinner *ngIf="isLoading"></mat-progress-spinner>
+  <mat-card-content *ngIf="!isLoading">
+    <form #registerForm="ngForm" class="form">
+      <mat-form-field class="full-width">
+        <mat-label>Username</mat-label>
+        <input matInput placeholder="username" name="username" ngModel required minlength="6">
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <mat-label>E-mail</mat-label>
+        <input matInput placeholder="E-mail" name="email" ngModel email required>
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <mat-label>Password</mat-label>
+        <input type="password" matInput placeholder="Password" name="password" ngModel required minlength="5">
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <mat-label>Repeat Password</mat-label>
+        <input type="password" matInput placeholder="Repeat Password" name="repeatPassword" ngModel required
+          minlength="5">
+      </mat-form-field>
+    </form>
+    <mat-card-actions>
+      <button mat-raised-button (click)="onSubmit(registerForm)" color="primary">REGISTER</button>
+    </mat-card-actions>
+  </mat-card-content>
+</div>

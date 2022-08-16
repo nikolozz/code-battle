@@ -1,21 +1,19 @@
-<code-alert (closeAlert)="onGameOver()" *ngIf="gameResult" [message]="gameResult"></code-alert>
-
-<div class="row" style="margin-top: 5%;">
-  <div class="col-sm">
-    <div class="row">
-      <div class="col-md-21">
-        <code-editor (codeChangedEvent)="onCodeChange($event)"></code-editor>
-      </div>
-      <div class="col-md-12 board-buttons">
-        <div class="btn btn-primary" (click)="onSubmit()">Submit</div>
-        <div class="btn btn-success" (click)="onTest()">Test</div>
-      </div>
+<div class="container">
+  <div class="challenge">
+    <div class="challenge-editor">
+      <code-editor (codeChangedEvent)="onCodeChange($event)"></code-editor>
+    </div>
+    <div class="challenge-task">
+      <code-challenge-task></code-challenge-task>
     </div>
   </div>
-  <div class="col-sm">
-    <code-challenge-task></code-challenge-task>
-  </div>
-  <div class="timer text-dark">
-    <cd-timer (onComplete)="onTimerComplete()" [countdown]="true" [startTime]="300" format="ms"></cd-timer>
+
+  <div class="challenge-buttons">
+    <div>
+      <button mat-raised-button color="primary" class="btn btn-primary" (click)="onSubmit()">Submit</button>
+    </div>
+    <div>
+      <button mat-raised-button color="primary" class="btn btn-success" (click)="onTest()">Test</button>
+    </div>
   </div>
 </div>

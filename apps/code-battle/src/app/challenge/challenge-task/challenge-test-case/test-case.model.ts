@@ -1,3 +1,4 @@
+// TODO Move to lib
 export class TestCase {
   public constructor(
     public testCase: string,

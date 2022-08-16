@@ -22,18 +22,20 @@ export class ChallengeComponent implements OnInit, OnDestroy {
   public constructor(
     private readonly challengeService: ChallengeService,
     private readonly activatedRoute: ActivatedRoute,
-    private readonly router: Router,
-  ) { }
+    private readonly router: Router
+  ) {}
 
   public ngOnInit(): void {
     // TODO RxJS pipe map to send WIN or LOSE in uppercase
     this.gameResultSubscription = this.challengeService
-      .getGameResult().pipe(map((result) => result === 'win' ? 'You won!' : 'You Lose'))
+      .getGameResult()
+      .pipe(map((result) => (result === 'win' ? 'You won!' : 'You Lose')))
       .subscribe((result) => {
         this.gameResult = result as string;
       });
 
     this.activatedRoute.params.subscribe((params) => {
+      console.log(params['id']);
       this.roomId = params['id'];
     });
   }

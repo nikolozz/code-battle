@@ -6,24 +6,20 @@ import { TestCase } from './challenge-test-case/test-case.model';
 @Component({
   selector: 'code-challenge-task',
   templateUrl: './challenge-task.component.html',
-  styles: [
-    `
-      .challenge-box {
-        min-height: 260px;
-        text-align: left;
-      }
-    `,
-  ],
 })
 export class ChallengeTaskComponent implements OnInit, OnDestroy {
-  public testCases: TestCase[] = [];
+  public testCases: TestCase[] = [
+    { testCase: '2 + 2 should return 4', status: 'waiting' },
+    { testCase: '2 + 2 should return 4', status: 'waiting' },
+    { testCase: '2 + 2 should return 4', status: 'waiting' },
+  ];
 
   private challengeSubscription?: Subscription;
-  public challenge = '';
+  public challenge = 'Return sum of numbers';
 
   private testResultsSubscription?: Subscription;
 
-  public constructor(private readonly challengeService: ChallengeService) { }
+  public constructor(private readonly challengeService: ChallengeService) {}
 
   ngOnInit(): void {
     this.testResultsSubscription = this.challengeService
@@ -37,13 +33,15 @@ export class ChallengeTaskComponent implements OnInit, OnDestroy {
     this.challengeSubscription = this.challengeService
       .getChallenge()
       .subscribe((challenge) => {
-        const challenges = challenge as { challenge: string; cases: string[]; };
+        const challenges = challenge as { challenge: string; cases: string[] };
+
+        console.log(challenges.challenge);
 
         this.challenge = challenges.challenge;
         this.testCases.push(
           ...challenges.cases.map(
-            (testCase) => new TestCase(testCase, 'waiting'),
-          ),
+            (testCase) => new TestCase(testCase, 'waiting')
+          )
         );
       });
   }
