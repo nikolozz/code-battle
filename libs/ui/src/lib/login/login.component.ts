@@ -2,7 +2,8 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '@code-battle/ui';
+
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'code-auth',
