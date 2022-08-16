@@ -9,7 +9,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as argon from 'argon2';
 
-import { DBUser, RegisterUser, UserService } from '@code-battle/user';
+import { RegisterUser, UserService } from '@code-battle/user';
 
 import { JwtTokenPayload } from './interfaces';
 import { User } from '@code-battle/api-types';
