@@ -1,21 +1,19 @@
 import { Component, Input } from '@angular/core';
-import { User } from '@code-battle/api-types';
-
-// TODO move Room to lib/api-types
-export interface Room {
-  player: string;
-  rank: number;
-  time: string;
-}
+import { ChallengeLevel, Room, User } from '@code-battle/api-types';
 
 type KRoom = Array<keyof Room>;
 
 const rooms: Room[] = [
-  { player: 'Niko', rank: 1200, time: '5 Mins' },
-  { player: 'Elina', rank: 1200, time: '10 Mins' },
-  { player: 'Chyipo', rank: 1200, time: '1 Min' },
-  { player: 'Mia', rank: 1200, time: '1 Min' },
-  { player: 'Dato', rank: 1200, time: '15 Mins' },
+  { player: 'Niko', rank: 1200, level: ChallengeLevel.EASY, time: '5 Mins' },
+  {
+    player: 'Elina',
+    rank: 1200,
+    level: ChallengeLevel.MEDIUM,
+    time: '10 Mins',
+  },
+  { player: 'Chyipo', rank: 1680, level: ChallengeLevel.EASY, time: '1 Min' },
+  { player: 'Mia', rank: 1200, level: ChallengeLevel.HARD, time: '1 Min' },
+  { player: 'Dato', rank: 1200, level: ChallengeLevel.MEDIUM, time: '15 Mins' },
 ];
 
 @Component({
