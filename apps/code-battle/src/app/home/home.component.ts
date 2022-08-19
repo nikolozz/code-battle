@@ -2,24 +2,29 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Subscription } from 'rxjs';
+import { catchError, map, Subscription, throwError } from 'rxjs';
 import { HomeService } from './home.service';
 import { AlertComponent, AuthService } from '@code-battle/ui';
-import { User } from '@code-battle/api-types';
+import {
+  BaseUser,
+  ChallengeCreate,
+  DashboardChallengeRoom,
+} from '@code-battle/common';
 
 @Component({
   selector: 'code-home',
   templateUrl: './home.component.html',
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  public room?: string;
   public loading?: boolean;
-  public user?: Omit<User, 'password'> | null;
+  public user?: BaseUser | null;
 
-  private getInviteSubscription?: Subscription;
-  private challengeStartedSubscription?: Subscription;
+  public rooms: DashboardChallengeRoom[] = [];
+
   // TODO should be user be subscribed or fetched from localStorage?
   private userSub?: Subscription;
+
+  private challengeRoomsSub?: Subscription;
 
   constructor(
     private readonly homeService: HomeService,
@@ -37,45 +42,52 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.user = null;
     });
 
-    this.getInviteSubscription = this.homeService
-      .getInvite()
-      .subscribe((data) => {
-        const dialogRef = this.dialog.open(AlertComponent, {
+    this.challengeRoomsSub = this.homeService
+      .getActiveChallengeRooms()
+      .pipe(
+        map((rooms) => {
+          return rooms.map((room) => ({
+            player: room.createdBy.username,
+            // Todo fix workaround with "|| 0"
+            rank: room.createdBy.rank || 0,
+            level: room.level,
+            time: room.duration,
+          }));
+        })
+      )
+      .subscribe((rooms: DashboardChallengeRoom[]) => {
+        this.rooms = rooms;
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.userSub?.unsubscribe();
+    this.challengeRoomsSub?.unsubscribe();
+  }
+
+  public async onCreateRoom(event: ChallengeCreate): Promise<void> {
+    this.homeService
+      .createRoom(event)
+      .pipe(
+        catchError((error) => {
+          this.dialog.open(AlertComponent, {
+            data: {
+              title: 'Cannot create a challenge',
+              message:
+                'Sorry we are unable to create a challenge at current time',
+            },
+          });
+          console.log(error);
+          return throwError(() => new Error('Cannot create room'));
+        })
+      )
+      .subscribe((value) => {
+        this.dialog.open(AlertComponent, {
           data: {
-            title: 'User Joined',
-            message: 'xoxlushka Joined the Game!',
+            title: 'Challenge Created',
+            message: 'You have created challenge ' + value.id,
           },
         });
-
-        dialogRef.afterClosed().subscribe((result) => {
-          console.log(`Dialog result: ${result}`);
-        });
-
-        this.room = data as string;
       });
-
-    this.challengeStartedSubscription = this.homeService
-      .challengeStarted()
-      .subscribe((data) => {
-        this.router.navigate(['../challenge', data]);
-      });
-  }
-
-  public ngOnDestroy(): void {
-    this.getInviteSubscription?.unsubscribe();
-    this.challengeStartedSubscription?.unsubscribe();
-    this.userSub?.unsubscribe();
-  }
-
-  public onStartChallenge() {
-    this.loading = true;
-    this.homeService.startChallenge();
-  }
-
-  public onAcceptChallenge() {
-    if (this.room) {
-      this.loading = false;
-      this.homeService.acceptChallenge(this.room);
-    }
   }
 }

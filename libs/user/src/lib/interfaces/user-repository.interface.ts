@@ -1,4 +1,4 @@
-import { User } from '@code-battle/api-types';
+import { User } from '@code-battle/common';
 import { DBUser } from '../entities';
 
 export interface UserRepository {

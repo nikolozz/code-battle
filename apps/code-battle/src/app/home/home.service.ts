@@ -1,4 +1,7 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ChallengeCreate, ChallengeRoom } from '@code-battle/common';
+import { Observable } from 'rxjs';
 import { WebsocketService } from '../websocket/websocket.service';
 
 @Injectable({
@@ -6,23 +9,21 @@ import { WebsocketService } from '../websocket/websocket.service';
 })
 export class HomeService {
   public isChallengeStarted?: boolean;
+  private API_URL = 'http://localhost:3001/api';
 
-  constructor(private readonly webSocketService: WebsocketService) {}
+  constructor(
+    private readonly webSocketService: WebsocketService,
+    private readonly http: HttpClient
+  ) {}
 
-  public startChallenge() {
-    this.webSocketService.emit('startChallenge', 'empty');
+  public getActiveChallengeRooms(): Observable<ChallengeRoom[]> {
+    return this.http.get<ChallengeRoom[]>(`${this.API_URL}/challenge-room`);
   }
 
-  public getInvite() {
-    return this.webSocketService.fromEvent('challengeInvite');
-  }
-
-  public acceptChallenge(room: string) {
-    this.webSocketService.emit('acceptChallenge', room);
-  }
-
-  public challengeStarted() {
-    this.isChallengeStarted = true;
-    return this.webSocketService.fromEvent('challengeStarted');
+  public createRoom(room: ChallengeCreate): Observable<ChallengeRoom> {
+    return this.http.post<ChallengeRoom>(
+      `${this.API_URL}/challenge-room`,
+      room
+    );
   }
 }

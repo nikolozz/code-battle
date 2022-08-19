@@ -5,6 +5,8 @@ import * as Joi from '@hapi/joi';
 import { UserEntity } from '@code-battle/user';
 
 import { AuthModule } from './auth/auth.module';
+import { ChallengeModule } from './challenge/challenge.module';
+import { ChallengeRoomEntity } from '@code-battle/challenge';
 
 @Module({
   imports: [
@@ -33,11 +35,12 @@ import { AuthModule } from './auth/auth.module';
           synchronize: true,
           logging:
             configService.get('NODE_ENV') === 'development' ? true : false,
-          entities: [UserEntity],
+          entities: [UserEntity, ChallengeRoomEntity],
         };
       },
     }),
     AuthModule,
+    ChallengeModule,
   ],
 })
 export class AppModule {}

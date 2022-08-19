@@ -5,7 +5,7 @@ import { UserRepository } from './interfaces/user-repository.interface';
 import UserEntity from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { Roles } from './enums';
-import { User } from '@code-battle/api-types';
+import { User } from '@code-battle/common';
 
 export class UserRepositoryImpl implements UserRepository {
   constructor(

@@ -1,6 +1,4 @@
-import { User as BaseUser } from '@code-battle/api-types';
-
-export const mockUser: BaseUser = {
+export const mockUser = {
   id: 0,
   email: 'test@test.com',
   username: 'username',

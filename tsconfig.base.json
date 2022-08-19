@@ -15,8 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@code-battle/api-types": ["libs/api-types/src/index.ts"],
       "@code-battle/auth": ["libs/auth/src/index.ts"],
+      "@code-battle/challenge": ["libs/challenge/src/index.ts"],
+      "@code-battle/common": ["libs/common/src/index.ts"],
       "@code-battle/mocks": ["libs/mocks/src/index.ts"],
       "@code-battle/ui": ["libs/ui/src/index.ts"],
       "@code-battle/user": ["libs/user/src/index.ts"],

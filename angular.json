@@ -3,10 +3,11 @@
   "version": 2,
   "projects": {
     "api": "apps/api",
-    "api-types": "libs/api-types",
     "auth": "libs/auth",
+    "challenge": "libs/challenge",
     "code-battle": "apps/code-battle",
     "code-battle-e2e": "apps/code-battle-e2e",
+    "common": "libs/common",
     "mocks": "libs/mocks",
     "ui": "libs/ui",
     "user": "libs/user"

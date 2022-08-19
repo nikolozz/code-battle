@@ -1,14 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { ChallengeDuration, ChallengeLevel } from '@code-battle/api-types';
-
-// TODO Move to libs
-interface Room {
-  level: ChallengeLevel;
-  duration: ChallengeDuration;
-  isPrivate: boolean;
-}
+import {
+  ChallengeCreate,
+  ChallengeDuration,
+  ChallengeLevel,
+} from '@code-battle/common';
 
 @Component({
   selector: 'code-create-room',
@@ -24,22 +21,22 @@ export class CreateRoomComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private dialogRef: MatDialogRef<Room>
+    private dialogRef: MatDialogRef<ChallengeCreate>
   ) {}
 
   public ngOnInit() {
     this.form = this.formBuilder.group({
-      difficulty: ['', Validators.required],
+      level: ['', Validators.required],
       duration: ['', Validators.required],
-      accessibility: ['', Validators.required],
+      isPrivate: ['', Validators.required],
     });
   }
 
   public onClose(): void {
-    return void 0;
+    return this.dialogRef.close();
   }
 
   public onSubmit(): void {
-    return void 0;
+    return this.dialogRef.close(this.form.value);
   }
 }

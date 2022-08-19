@@ -1,4 +1,4 @@
-import { User } from '@code-battle/api-types';
+import { User } from '@code-battle/common';
 import { Inject, Injectable } from '@nestjs/common';
 import * as argon from 'argon2';
 

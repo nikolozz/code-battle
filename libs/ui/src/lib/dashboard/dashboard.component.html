@@ -1,6 +1,6 @@
 <div class="flex-center">
   <div class="dashboard">
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <table mat-table [dataSource]="rooms" class="mat-elevation-z8">
 
       <ng-container matColumnDef="player">
         <th mat-header-cell *matHeaderCellDef> Player </th>
@@ -27,7 +27,7 @@
     </table>
 
     <div class="button-container">
-      <button mat-button [disabled]="!user" mat-raised-button color="primary" (click)="onCreateGame()">
+      <button mat-button [disabled]="!isAuthenticated" mat-raised-button color="primary" (click)="onCreateGame()">
         Create Game
       </button>
     </div>
