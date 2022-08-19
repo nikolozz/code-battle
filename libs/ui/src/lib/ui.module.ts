@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AlertComponent } from './alert/alert.component';
 import { CodeEditorComponent } from './code-editor/code-editor.component';
@@ -11,13 +12,14 @@ import { AngularMaterialModule } from './angular-material.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
-import { FormsModule } from '@angular/forms';
+import { CreateRoomComponent } from './create-room/create-room.component';
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     AngularMaterialModule,
   ],
@@ -28,6 +30,7 @@ import { FormsModule } from '@angular/forms';
     DashboardComponent,
     LoginComponent,
     RegisterComponent,
+    CreateRoomComponent,
   ],
   providers: [AuthService],
   exports: [

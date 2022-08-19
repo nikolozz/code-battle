@@ -1,0 +1,36 @@
+<h2 mat-dialog-title>{{ title }}</h2>
+
+<mat-dialog-content [formGroup]="form" style="height: calc(100% - 96px); display: flex; flex-direction: column;">
+  <mat-form-field>
+    <mat-label>Difficulty</mat-label>
+    <mat-select formControlName="difficulty" name="difficulty">
+      <mat-option *ngFor="let level of levels | keyvalue" [value]="level.key">
+        {{level.value}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Duration</mat-label>
+    <mat-select formControlName="duration" name="duration">
+      <mat-option *ngFor="let duration of durations | keyvalue" [value]="duration.key">
+        {{duration.value}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-label>Challenge Type</mat-label>
+  <mat-radio-group class="radio-group" formControlName="accessibility" name="accessibility">
+    <mat-radio-button class="radio-button" value='public'>
+      Public
+    </mat-radio-button>
+    <mat-radio-button class="radio-button" value='private'>
+      Private
+    </mat-radio-button>
+  </mat-radio-group>
+</mat-dialog-content>
+
+<mat-dialog-actions align="center" style="justify-content: space-evenly;">
+  <button class="mat-raised-button" (click)="onClose()">Close</button>
+  <button class="mat-raised-button mat-primary" (click)="onSubmit()">Create</button>
+</mat-dialog-actions>

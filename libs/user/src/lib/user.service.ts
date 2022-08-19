@@ -14,7 +14,7 @@ export class UserService {
     private readonly userRepository: UserRepository
   ) {}
 
-  public getById(userId: number): Promise<DBUser | null> {
+  public getById(userId: number): Promise<DBUser> {
     return this.userRepository.getById(userId);
   }
 
@@ -36,7 +36,7 @@ export class UserService {
     return user;
   }
 
-  public getByEmail(email: string): Promise<User | null> {
+  public getByEmail(email: string): Promise<User> {
     return this.userRepository.getByEmail(email);
   }
 

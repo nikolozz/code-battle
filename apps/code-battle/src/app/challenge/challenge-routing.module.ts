@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AuthGuard } from '@nestjs/passport';
+import { AuthGuard } from '@code-battle/ui';
 import { ChallengeGuard } from './challenge-task/challenge.guard';
 import { ChallengeComponent } from './challenge.component';
 

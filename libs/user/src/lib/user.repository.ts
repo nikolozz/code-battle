@@ -13,11 +13,11 @@ export class UserRepositoryImpl implements UserRepository {
   ) {}
 
   public getById(id: number): Promise<DBUser | null> {
-    return this.users.findOneBy({ id });
+    return this.users.findOneByOrFail({ id });
   }
 
   public getByEmail(email: string): Promise<User | null> {
-    return this.users.findOneBy({ email });
+    return this.users.findOneByOrFail({ email });
   }
 
   public create(user: DBUser): Promise<User> {
