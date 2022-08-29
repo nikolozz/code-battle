@@ -3,12 +3,11 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 
 import { UiModule } from '@code-battle/ui';
-import { WebsocketModule } from '../websocket/websocket.module';
 
 import { HomeComponent } from './home.component';
 
 @NgModule({
   declarations: [HomeComponent],
-  imports: [CommonModule, UiModule, WebsocketModule, HttpClientModule],
+  imports: [CommonModule, UiModule, HttpClientModule],
 })
 export class HomeModule {}

@@ -13,6 +13,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { CreateRoomComponent } from './create-room/create-room.component';
+import { UiWebsocketModule } from '@code-battle/ui/websocket';
 
 @NgModule({
   imports: [
@@ -22,6 +23,7 @@ import { CreateRoomComponent } from './create-room/create-room.component';
     ReactiveFormsModule,
     HttpClientModule,
     AngularMaterialModule,
+    UiWebsocketModule,
   ],
   declarations: [
     AlertComponent,

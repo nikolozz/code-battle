@@ -10,7 +10,7 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
-  OneToOne,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -29,7 +29,7 @@ export class ChallengeRoomEntity implements ChallengeRoom {
   @Column('enum', { enum: ChallengeLevel })
   level: ChallengeLevel;
 
-  @OneToOne(() => UserEntity, (user) => user.id, { eager: true })
+  @ManyToOne(() => UserEntity, (user) => user.id, { eager: true })
   @JoinColumn()
   createdBy: BaseUser;
 

@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ChallengeCreate, ChallengeRoom } from '@code-battle/common';
 import { Observable } from 'rxjs';
-import { WebsocketService } from '../websocket/websocket.service';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +11,6 @@ export class HomeService {
   private API_URL = 'http://localhost:3001/api';
 
   constructor(
-    private readonly webSocketService: WebsocketService,
     private readonly http: HttpClient
   ) {}
 

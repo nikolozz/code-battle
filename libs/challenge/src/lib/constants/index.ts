@@ -1,1 +1,1 @@
-export const CHALLENGE_ROOM_REPOSIT0RY = 'CHALLENGE_ROOM_REPOSIT0RY';
+export * from './tokens';

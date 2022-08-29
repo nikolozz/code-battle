@@ -13,11 +13,17 @@ export class ChallengeRepository implements ChallengeRoomRepository {
     private readonly challengeRoom: Repository<ChallengeRoom>
   ) {}
 
-  getActiveRooms(): Promise<ChallengeRoom[]> {
+  public markRoomAsInactive(roomId: string): Promise<number> {
+    return this.challengeRoom
+      .update(roomId, { active: false })
+      .then((result) => result.affected);
+  }
+
+  public getActiveRooms(): Promise<ChallengeRoom[]> {
     return this.challengeRoom.find({ where: { active: true } });
   }
 
-  async createRoom(
+  public async createRoom(
     userId: number,
     room: ChallengeCreate
   ): Promise<ChallengeRoom> {
