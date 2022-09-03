@@ -1,4 +1,4 @@
-import { User } from '@code-battle/api-types';
+import { User } from '@code-battle/common';
 import { Inject, Injectable } from '@nestjs/common';
 import * as argon from 'argon2';
 
@@ -14,7 +14,7 @@ export class UserService {
     private readonly userRepository: UserRepository
   ) {}
 
-  public getById(userId: number): Promise<DBUser | null> {
+  public getById(userId: number): Promise<DBUser> {
     return this.userRepository.getById(userId);
   }
 
@@ -36,7 +36,7 @@ export class UserService {
     return user;
   }
 
-  public getByEmail(email: string): Promise<User | null> {
+  public getByEmail(email: string): Promise<User> {
     return this.userRepository.getByEmail(email);
   }
 

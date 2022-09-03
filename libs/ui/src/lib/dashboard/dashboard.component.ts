@@ -1,20 +1,9 @@
-import { Component, Input } from '@angular/core';
-import { ChallengeLevel, Room, User } from '@code-battle/api-types';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { ChallengeCreate, DashboardChallengeRoom } from '@code-battle/common';
+import { CreateRoomComponent } from '../create-room/create-room.component';
 
-type KRoom = Array<keyof Room>;
-
-const rooms: Room[] = [
-  { player: 'Niko', rank: 1200, level: ChallengeLevel.EASY, time: '5 Mins' },
-  {
-    player: 'Elina',
-    rank: 1200,
-    level: ChallengeLevel.MEDIUM,
-    time: '10 Mins',
-  },
-  { player: 'Chyipo', rank: 1680, level: ChallengeLevel.EASY, time: '1 Min' },
-  { player: 'Mia', rank: 1200, level: ChallengeLevel.HARD, time: '1 Min' },
-  { player: 'Dato', rank: 1200, level: ChallengeLevel.MEDIUM, time: '15 Mins' },
-];
+type KRoom = Array<keyof DashboardChallengeRoom>;
 
 @Component({
   selector: 'code-dashboard',
@@ -22,8 +11,22 @@ const rooms: Room[] = [
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent {
-  @Input() user?: Omit<User, 'password'> | null;
+  @Input() isAuthenticated = false;
+  @Input() rooms: DashboardChallengeRoom[] = [];
+  @Output() createRoomEvent = new EventEmitter<ChallengeCreate>();
 
-  public displayedColumns: KRoom = ['player', 'rank', 'time'];
-  public dataSource = rooms;
+  public displayedColumns: KRoom = ['player', 'rank', 'level', 'time'];
+
+  constructor(private readonly dialog: MatDialog) {}
+
+  public onCreateGame(): void {
+    const dialogRef = this.dialog.open(CreateRoomComponent, {
+      height: '400px',
+      minWidth: '350px',
+    });
+
+    dialogRef
+      .afterClosed()
+      .subscribe((data) => this.createRoomEvent.emit(data));
+  }
 }

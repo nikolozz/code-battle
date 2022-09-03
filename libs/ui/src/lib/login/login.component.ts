@@ -37,7 +37,6 @@ export class LoginComponent {
         this.isLoading = false;
       },
       (error) => {
-        console.log(error);
         this.error = error?.error?.message || 'Unexpected Error Occurred';
         this.isLoading = true;
       }

@@ -1,4 +1,4 @@
-import { UserSignUp } from '@code-battle/api-types';
+import { UserSignUp } from '@code-battle/common';
 import {
   IsEmail,
   IsNotEmpty,

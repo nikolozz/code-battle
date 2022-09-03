@@ -1,39 +1,41 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { UserSignUp, User } from '@code-battle/api-types';
+import { UserSignUp, BaseUser } from '@code-battle/common';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private API_URL = 'http://localhost:3001/api';
 
-  public user = new BehaviorSubject<User | null>(null);
+  public user = new BehaviorSubject<BaseUser | null>(null);
 
   constructor(private readonly http: HttpClient) {}
 
-  public authenticate(): Observable<User> {
-    return this.http.get<User>(`${this.API_URL}/authenticate`);
+  public authenticate(): Observable<BaseUser> {
+    return this.http.get<BaseUser>(`${this.API_URL}/authenticate`);
   }
 
-  public signUp(user: UserSignUp): Observable<User> {
+  public signUp(user: UserSignUp): Observable<BaseUser> {
     return this.http
-      .post<User>(`${this.API_URL}/register`, user)
+      .post<BaseUser>(`${this.API_URL}/register`, user, {
+        withCredentials: true,
+      })
       .pipe(tap(this.emitUser.bind(this)));
   }
 
   public signIn(signInData: {
     email: string;
     password: string;
-  }): Observable<User> {
+  }): Observable<BaseUser> {
     return this.http
-      .post<User>(`${this.API_URL}/login`, signInData, {
+      .post<BaseUser>(`${this.API_URL}/login`, signInData, {
         withCredentials: true,
       })
       .pipe(tap(this.emitUser.bind(this)));
   }
 
-  public refreshToken(): Observable<User> {
-    return this.http.get<User>(`${this.API_URL}/refresh-token`, {
+  public refreshToken(): Observable<BaseUser> {
+    return this.http.get<BaseUser>(`${this.API_URL}/refresh-token`, {
       withCredentials: true,
     });
   }
@@ -53,7 +55,7 @@ export class AuthService {
     return this.user.value;
   }
 
-  private emitUser(user: User) {
+  private emitUser(user: BaseUser) {
     localStorage.setItem('user', JSON.stringify(user));
 
     this.user.next(user);

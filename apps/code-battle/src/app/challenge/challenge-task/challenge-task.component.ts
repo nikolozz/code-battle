@@ -24,7 +24,7 @@ export class ChallengeTaskComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.testResultsSubscription = this.challengeService
       .getTestResults()
-      .subscribe((results: any) => {
+      .subscribe((results: unknown) => {
         this.testCases.forEach((testCase, idx) => {
           testCase.status = results[idx];
         });
@@ -34,8 +34,6 @@ export class ChallengeTaskComponent implements OnInit, OnDestroy {
       .getChallenge()
       .subscribe((challenge) => {
         const challenges = challenge as { challenge: string; cases: string[] };
-
-        console.log(challenges.challenge);
 
         this.challenge = challenges.challenge;
         this.testCases.push(
