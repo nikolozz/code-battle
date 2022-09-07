@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { WebsocketService } from '../websocket/websocket.service';
+import { WebsocketService } from '@code-battle/ui/websocket';
 
 @Injectable({ providedIn: 'root' })
 export class ChallengeService {
   constructor(private readonly webSocketService: WebsocketService) {}
 
   public testCode(roomId: string, code: string) {
-    this.webSocketService.emit('codeTest', [roomId, code]);
+    this.webSocketService.emit('codeTest', roomId);
   }
 
   public getTestResults() {

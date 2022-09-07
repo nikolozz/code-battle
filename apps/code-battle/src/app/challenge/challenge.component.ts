@@ -35,7 +35,6 @@ export class ChallengeComponent implements OnInit, OnDestroy {
       });
 
     this.activatedRoute.params.subscribe((params) => {
-      console.log(params['id']);
       this.roomId = params['id'];
     });
   }
@@ -51,7 +50,6 @@ export class ChallengeComponent implements OnInit, OnDestroy {
   }
 
   public onSubmit(): void {
-    console.log(this.codeSnippet, this.roomId);
     if (this.codeSnippet && this.roomId) {
       this.challengeService.testCode(this.roomId, this.codeSnippet);
     }

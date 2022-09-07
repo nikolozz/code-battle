@@ -5,6 +5,9 @@ import * as Joi from '@hapi/joi';
 import { UserEntity } from '@code-battle/user';
 
 import { AuthModule } from './auth/auth.module';
+import { ChallengeModule } from './challenge/challenge.module';
+import { ChallengeEntity, ChallengeRoomEntity } from '@code-battle/challenge';
+import { AwsModule } from '@code-battle/aws';
 
 @Module({
   imports: [
@@ -16,6 +19,9 @@ import { AuthModule } from './auth/auth.module';
         POSTGRES_USER: Joi.string().required(),
         POSTGRES_PASSWORD: Joi.string().required(),
         POSTGRES_DB: Joi.string().required(),
+        AWS_ACCESS_KEY_ID: Joi.string().required(),
+        AWS_SECRET_ACCESS_KEY_ID: Joi.string().required(),
+        AWS_REGION: Joi.string().required(),
         PORT: Joi.number(),
       }),
     }),
@@ -33,11 +39,21 @@ import { AuthModule } from './auth/auth.module';
           synchronize: true,
           logging:
             configService.get('NODE_ENV') === 'development' ? true : false,
-          entities: [UserEntity],
+          entities: [UserEntity, ChallengeRoomEntity, ChallengeEntity],
         };
       },
     }),
+    AwsModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        region: configService.get('AWS_REGION'),
+        accessKeyId: configService.get('AWS_ACCESS_KEY_ID'),
+        secretAccessKey: configService.get('AWS_SECRET_ACCESS_KEY_ID'),
+      }),
+    }),
     AuthModule,
+    ChallengeModule,
   ],
 })
 export class AppModule {}

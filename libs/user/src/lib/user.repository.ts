@@ -5,7 +5,7 @@ import { UserRepository } from './interfaces/user-repository.interface';
 import UserEntity from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { Roles } from './enums';
-import { User } from '@code-battle/api-types';
+import { User } from '@code-battle/common';
 
 export class UserRepositoryImpl implements UserRepository {
   constructor(
@@ -13,11 +13,11 @@ export class UserRepositoryImpl implements UserRepository {
   ) {}
 
   public getById(id: number): Promise<DBUser | null> {
-    return this.users.findOneBy({ id });
+    return this.users.findOneByOrFail({ id });
   }
 
   public getByEmail(email: string): Promise<User | null> {
-    return this.users.findOneBy({ email });
+    return this.users.findOneByOrFail({ email });
   }
 
   public create(user: DBUser): Promise<User> {

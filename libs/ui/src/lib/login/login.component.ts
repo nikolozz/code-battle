@@ -1,4 +1,3 @@
-// Todo merge register/login components
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -37,7 +36,6 @@ export class LoginComponent {
         this.isLoading = false;
       },
       (error) => {
-        console.log(error);
         this.error = error?.error?.message || 'Unexpected Error Occurred';
         this.isLoading = true;
       }

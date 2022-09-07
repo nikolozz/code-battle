@@ -9,10 +9,10 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as argon from 'argon2';
 
-import { RegisterUser, UserService } from '@code-battle/user';
+import { DBUser, UserService } from '@code-battle/user';
 
 import { JwtTokenPayload } from './interfaces';
-import { User } from '@code-battle/api-types';
+import { User, UserSignUp } from '@code-battle/common';
 
 @Injectable()
 export class AuthService {
@@ -22,7 +22,7 @@ export class AuthService {
     private readonly userService: UserService
   ) {}
 
-  public async register(user: RegisterUser): Promise<User | null> {
+  public async register(user: UserSignUp): Promise<User | null> {
     this.validateConfirmPassword(user.password, user.repeatPassword);
 
     const hashedPassword = await argon.hash(user.password);
@@ -60,6 +60,14 @@ export class AuthService {
     return user;
   }
 
+  public async getAuthorizedUserFromToken(token: string): Promise<DBUser | null> {
+    const { userId } = this.jwtService.verify(token, {
+      secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
+    });
+
+    return this.userService.getById(userId);
+  }
+
   public signJwtToken(payload: JwtTokenPayload): Promise<string> {
     return this.jwtService.signAsync(payload);
   }
@@ -91,7 +99,10 @@ export class AuthService {
 
   public getCookieWithJwtRefreshToken(
     userId: number
-  ): { cookie: string; token: string } {
+  ): {
+    cookie: string;
+    token: string;
+  } {
     const payload: JwtTokenPayload = { userId };
 
     const token = this.jwtService.sign(payload, {

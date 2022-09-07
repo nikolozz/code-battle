@@ -11,8 +11,8 @@ export interface AlertData {
   templateUrl: './alert.component.html',
 })
 export class AlertComponent {
-  @Input() message = '';
-  @Input() title = '';
+  message = '';
+  title = '';
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: AlertData) {
     this.message = data.message;

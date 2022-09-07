@@ -21,10 +21,7 @@ export class AuthInterceptorService implements HttpInterceptor {
     req: HttpRequest<unknown>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
-    if (
-      req.url.indexOf('/refresh-token') > -1 ||
-      !localStorage.getItem('user')
-    ) {
+    if (req.url.indexOf('/refresh-token') > -1) {
       return next.handle(req);
     }
 

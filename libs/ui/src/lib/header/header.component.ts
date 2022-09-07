@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { User } from '@code-battle/api-types';
+import { User } from '@code-battle/common';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../auth.service';
 

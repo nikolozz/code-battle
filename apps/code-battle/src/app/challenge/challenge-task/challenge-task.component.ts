@@ -35,8 +35,6 @@ export class ChallengeTaskComponent implements OnInit, OnDestroy {
       .subscribe((challenge) => {
         const challenges = challenge as { challenge: string; cases: string[] };
 
-        console.log(challenges.challenge);
-
         this.challenge = challenges.challenge;
         this.testCases.push(
           ...challenges.cases.map(

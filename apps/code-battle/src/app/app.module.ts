@@ -9,6 +9,7 @@ import { AuthInterceptorService, UiModule } from '@code-battle/ui';
 import { AppComponent } from './app.component';
 import { ChallengeModule } from './challenge/challenge.module';
 import { HomeModule } from './home/home.module';
+import { UiWebsocketModule } from '@code-battle/ui/websocket';
 
 @NgModule({
   declarations: [AppComponent],
@@ -20,6 +21,7 @@ import { HomeModule } from './home/home.module';
     AppRoutingModule,
     ChallengeModule,
     HomeModule,
+    UiWebsocketModule,
   ],
   providers: [
     {
