@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import {
-  ChallengeCreate,
+  ChallengeRoomCreate,
   ChallengeDuration,
   ChallengeLevel,
 } from '@code-battle/common';
@@ -21,7 +21,7 @@ export class CreateRoomComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private dialogRef: MatDialogRef<ChallengeCreate>
+    private dialogRef: MatDialogRef<ChallengeRoomCreate>
   ) {}
 
   public ngOnInit() {

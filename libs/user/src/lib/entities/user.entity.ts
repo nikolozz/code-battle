@@ -1,5 +1,5 @@
-import { User as BaseUser } from '@code-battle/common';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Challenge, User as BaseUser } from '@code-battle/common';
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import { Min } from 'class-validator';
 import { Roles } from '../enums';
@@ -36,6 +36,9 @@ class UserEntity implements DBUser {
   @Column({ type: 'varchar', nullable: true })
   @Exclude()
   public hashedRefreshToken?: string | null;
+
+  @ManyToMany('ChallengeEntity', 'players', { nullable: true })
+  public challenges: Challenge[];
 }
 
 export default UserEntity;

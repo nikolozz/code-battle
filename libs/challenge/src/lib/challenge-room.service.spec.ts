@@ -9,6 +9,7 @@ import { SqsService } from '@ssut/nestjs-sqs';
 import { ConfigService } from '@nestjs/config';
 import { ChallengeRoomService } from './challenge-room.service';
 import { CHALLENGE_ROOM_REPOSIT0RY } from './constants';
+import { ChallengeService } from './challenge.service';
 
 describe('ChallengeRoomService', () => {
   let challengeRoomService: ChallengeRoomService;
@@ -37,6 +38,12 @@ describe('ChallengeRoomService', () => {
           provide: ConfigService,
           useValue: mockedConfigService,
         },
+        {
+          provide: ChallengeService,
+          useValue: {
+            createChallenge: jest.fn().mockResolvedValue(true),
+          },
+        },
       ],
       exports: [ChallengeRoomService],
     }).compile();
@@ -49,12 +56,11 @@ describe('ChallengeRoomService', () => {
 
   afterAll(() => {
     jest.clearAllMocks();
-    sendSpy.mockClear();
   });
 
   describe('createRoom', () => {
     afterEach(() => {
-      sendSpy.mockClear();
+      jest.clearAllMocks();
     });
 
     const createRoomParams = {
@@ -63,17 +69,11 @@ describe('ChallengeRoomService', () => {
       isPrivate: false,
     };
 
-    it('should create room', async () => {
-      const createdRoom = await challengeRoomService.createRoom(
-        1,
-        createRoomParams
-      );
-
-      expect(createRoomSpy).toBeCalledTimes(1);
-      expect(createdRoom).toBe(challengeRoomMock);
-    });
-
     it('should send sqs message', async () => {
+      jest
+        .spyOn(mockChallengeRoomRepository, 'getActiveRooms')
+        .mockResolvedValue([]);
+
       await challengeRoomService.createRoom(1, createRoomParams);
 
       expect(sendSpy).toBeCalledTimes(1);
@@ -87,6 +87,20 @@ describe('ChallengeRoomService', () => {
           },
         })
       );
+    });
+
+    it('should create room', async () => {
+      jest
+        .spyOn(mockChallengeRoomRepository, 'getActiveRooms')
+        .mockResolvedValue([]);
+
+      const createdRoom = await challengeRoomService.createRoom(
+        1,
+        createRoomParams
+      );
+
+      expect(createRoomSpy).toBeCalledTimes(1);
+      expect(createdRoom).toBe(challengeRoomMock);
     });
   });
 });

@@ -6,12 +6,13 @@ import { HomeService } from './home.service';
 import { AlertComponent, AuthService } from '@code-battle/ui';
 import {
   BaseUser,
-  ChallengeCreate,
+  ChallengeRoomCreate,
   DashboardChallengeRoom,
   MessageTypes,
   RemoveChallengeRoom,
 } from '@code-battle/common';
 import { WebsocketService } from '@code-battle/ui/websocket';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'code-home',
@@ -36,7 +37,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     private readonly homeService: HomeService,
     private readonly dialog: MatDialog,
     private readonly wsService: WebsocketService,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
+    private readonly router: Router
   ) {}
 
   ngOnInit(): void {
@@ -80,7 +82,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       });
   }
 
-  public async onCreateRoom(event: ChallengeCreate): Promise<void> {
+  public async onCreateRoom(event: ChallengeRoomCreate): Promise<void> {
     this.createChallengeRoomSub = this.homeService
       .createRoom(event)
       .pipe(
@@ -108,6 +110,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.rooms = [...this.rooms, room];
 
           this.wsService.emit(MessageTypes.CreateChallengeRoom, room);
+          this.router.navigate(['../challenge/', value.id]);
         }
 
         this.dialog.open(AlertComponent, {

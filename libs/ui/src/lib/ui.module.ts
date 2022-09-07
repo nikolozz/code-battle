@@ -14,6 +14,7 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { CreateRoomComponent } from './create-room/create-room.component';
 import { UiWebsocketModule } from '@code-battle/ui/websocket';
+import { DialogComponent } from './dialog/dialog.component';
 
 @NgModule({
   imports: [
@@ -33,6 +34,7 @@ import { UiWebsocketModule } from '@code-battle/ui/websocket';
     LoginComponent,
     RegisterComponent,
     CreateRoomComponent,
+    DialogComponent,
   ],
   providers: [AuthService],
   exports: [

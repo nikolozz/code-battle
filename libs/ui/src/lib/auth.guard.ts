@@ -6,6 +6,7 @@ import { CanActivate } from '@angular/router';
 })
 export class AuthGuard implements CanActivate {
   canActivate(): boolean {
+    // TODO Fix if page was closed user is lost from localStorage
     const user = localStorage.getItem('user');
 
     return !!user;

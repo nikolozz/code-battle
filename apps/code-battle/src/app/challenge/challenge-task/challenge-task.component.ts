@@ -24,7 +24,7 @@ export class ChallengeTaskComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.testResultsSubscription = this.challengeService
       .getTestResults()
-      .subscribe((results: unknown) => {
+      .subscribe((results: any) => {
         this.testCases.forEach((testCase, idx) => {
           testCase.status = results[idx];
         });

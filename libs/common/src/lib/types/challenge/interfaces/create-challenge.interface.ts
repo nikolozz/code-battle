@@ -1,7 +1,6 @@
-import { ChallengeDuration, ChallengeLevel } from '../enums';
+import { BaseUser } from '../../user';
 
-export interface ChallengeCreate {
-  readonly level: ChallengeLevel;
-  readonly duration: ChallengeDuration;
-  readonly isPrivate: boolean;
+export interface CreateChallenge {
+  challengeRoomId: string;
+  players: Array<Partial<BaseUser>>;
 }

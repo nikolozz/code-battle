@@ -1,17 +1,18 @@
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import {
-  ChallengeCreate,
+  ChallengeRoomCreate,
   ChallengeDuration,
   ChallengeLevel,
   ChallengeRoom,
   RemoveChallengeRoom,
 } from '@code-battle/common';
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { SqsService } from '@ssut/nestjs-sqs';
 import * as uuid from 'uuid';
 
 import { ChallengeRoomRepository } from './interfaces';
 import { CHALLENGE_ROOM_REPOSIT0RY } from './constants';
-import { ConfigService } from '@nestjs/config';
+import { ChallengeService } from './challenge.service';
 
 @Injectable()
 export class ChallengeRoomService {
@@ -19,47 +20,46 @@ export class ChallengeRoomService {
     @Inject(CHALLENGE_ROOM_REPOSIT0RY)
     private readonly challengeRoomRepository: ChallengeRoomRepository,
     private readonly sqsService: SqsService,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    private readonly challengeService: ChallengeService
   ) {}
 
   public async createRoom(
     userId: number,
-    room: ChallengeCreate
+    room: ChallengeRoomCreate
   ): Promise<ChallengeRoom> {
-    try {
-      const createdRoom = await this.challengeRoomRepository.createRoom(
-        userId,
-        {
-          ...room,
-          level: ChallengeLevel[room.level],
-          duration: ChallengeDuration[room.duration],
-        }
-      );
-
-      this.sqsService.send<RemoveChallengeRoom>(
-        'INACTIVE_CHALLENGE_ROOM_QUEUE',
-        {
-          id: uuid.v4(),
-          body: { roomId: createdRoom.id },
-          delaySeconds: parseInt(
-            this.configService.get('INACTIVE_CHALLENGE_ROOM_IN_SECONDS')
-          ),
-        }
-      );
-
-      return createdRoom;
-    } catch (error) {
-      if (error?.code === '23505') {
-        throw new HttpException(
-          "You've already created the challenge",
-          HttpStatus.BAD_REQUEST
-        );
-      }
+    const activeUserRooms = await this.challengeRoomRepository.getActiveRooms({
+      userId,
+    });
+    if (activeUserRooms?.length) {
       throw new HttpException(
-        'Something went wrong',
-        HttpStatus.INTERNAL_SERVER_ERROR
+        "You've already created the challenge",
+        HttpStatus.BAD_REQUEST
       );
     }
+
+    // TODO Add Transaction
+    const createdRoom = await this.challengeRoomRepository.createRoom(userId, {
+      ...room,
+      // TODO should be deleted enum access after creating level, duration tables
+      level: ChallengeLevel[room.level],
+      duration: ChallengeDuration[room.duration],
+    });
+
+    await this.challengeService.createChallenge({
+      challengeRoomId: createdRoom.id,
+      players: [{ id: userId }],
+    });
+
+    this.sqsService.send<RemoveChallengeRoom>('INACTIVE_CHALLENGE_ROOM_QUEUE', {
+      id: uuid.v4(),
+      body: { roomId: createdRoom.id },
+      delaySeconds: parseInt(
+        this.configService.get('INACTIVE_CHALLENGE_ROOM_IN_SECONDS')
+      ),
+    });
+
+    return createdRoom;
   }
 
   public getActiveRooms(): Promise<ChallengeRoom[]> {
@@ -67,7 +67,7 @@ export class ChallengeRoomService {
   }
 
   public async removeChallengeRoom(roomId: string): Promise<void> {
-    // TODO Get ChallengeGame -> players from Redis and check if challenge room has active user.
+    // TODO Get ChallengeGame -> players from DB and check if challenge room has active user.
     const isChallengeRoomActive = false;
 
     if (isChallengeRoomActive) {

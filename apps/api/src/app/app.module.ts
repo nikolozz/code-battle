@@ -6,7 +6,7 @@ import { UserEntity } from '@code-battle/user';
 
 import { AuthModule } from './auth/auth.module';
 import { ChallengeModule } from './challenge/challenge.module';
-import { ChallengeRoomEntity } from '@code-battle/challenge';
+import { ChallengeEntity, ChallengeRoomEntity } from '@code-battle/challenge';
 import { AwsModule } from '@code-battle/aws';
 
 @Module({
@@ -39,7 +39,7 @@ import { AwsModule } from '@code-battle/aws';
           synchronize: true,
           logging:
             configService.get('NODE_ENV') === 'development' ? true : false,
-          entities: [UserEntity, ChallengeRoomEntity],
+          entities: [UserEntity, ChallengeRoomEntity, ChallengeEntity],
         };
       },
     }),

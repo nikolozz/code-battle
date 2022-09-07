@@ -1,13 +1,13 @@
-import { ChallengeCreate, ChallengeRoom } from '@code-battle/common';
+import { ChallengeRoomCreate, ChallengeRoom } from '@code-battle/common';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindManyOptions, Repository } from 'typeorm';
 
 import { ChallengeRoomEntity } from './entities';
-import { ChallengeRoomRepository } from './interfaces';
+import { ChallengeRoomRepository, GetActiveRooms } from './interfaces';
 
 @Injectable()
-export class ChallengeRepository implements ChallengeRoomRepository {
+export class ChallengeRoomRepositoryImpl implements ChallengeRoomRepository {
   constructor(
     @InjectRepository(ChallengeRoomEntity)
     private readonly challengeRoom: Repository<ChallengeRoom>
@@ -19,13 +19,24 @@ export class ChallengeRepository implements ChallengeRoomRepository {
       .then((result) => result.affected);
   }
 
-  public getActiveRooms(): Promise<ChallengeRoom[]> {
-    return this.challengeRoom.find({ where: { active: true } });
+  public getActiveRooms(options: GetActiveRooms): Promise<ChallengeRoom[]> {
+    const findOptions: FindManyOptions<ChallengeRoom> = {
+      where: { active: true },
+    };
+
+    if (options?.userId) {
+      findOptions.where = {
+        ...findOptions.where,
+        createdBy: { id: options.userId },
+      };
+    }
+
+    return this.challengeRoom.find(findOptions);
   }
 
   public async createRoom(
     userId: number,
-    room: ChallengeCreate
+    room: ChallengeRoomCreate
   ): Promise<ChallengeRoom> {
     const challengeRoom = this.challengeRoom.create({
       ...room,
