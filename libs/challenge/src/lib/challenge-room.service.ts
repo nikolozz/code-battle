@@ -1,5 +1,4 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import {
   ChallengeRoomCreate,
   ChallengeDuration,
@@ -7,7 +6,8 @@ import {
   ChallengeRoom,
   RemoveChallengeRoom,
 } from '@code-battle/common';
-import { SqsService } from '@ssut/nestjs-sqs';
+import { InjectQueue, Queue } from '@code-battle/message-queue';
+
 import * as uuid from 'uuid';
 
 import { ChallengeRoomRepository } from './interfaces';
@@ -19,8 +19,8 @@ export class ChallengeRoomService {
   constructor(
     @Inject(CHALLENGE_ROOM_REPOSIT0RY)
     private readonly challengeRoomRepository: ChallengeRoomRepository,
-    private readonly sqsService: SqsService,
-    private readonly configService: ConfigService,
+    @InjectQueue('CHALLENGE_QUEUE')
+    private readonly challengeQueue: Queue,
     private readonly challengeService: ChallengeService
   ) {}
 
@@ -51,13 +51,18 @@ export class ChallengeRoomService {
       players: [{ id: userId }],
     });
 
-    this.sqsService.send<RemoveChallengeRoom>('INACTIVE_CHALLENGE_ROOM_QUEUE', {
-      id: uuid.v4(),
-      body: { roomId: createdRoom.id },
-      delaySeconds: parseInt(
-        this.configService.get('INACTIVE_CHALLENGE_ROOM_IN_SECONDS')
-      ),
-    });
+    this.challengeQueue.sendEvent<RemoveChallengeRoom>(
+      'CHALLENGE_QUEUE',
+      {
+        id: uuid.v4(),
+        body: {
+          roomId: createdRoom.id,
+        },
+      },
+      {
+        delay: 1000 * 60 * 15,
+      }
+    );
 
     return createdRoom;
   }

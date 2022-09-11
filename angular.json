@@ -9,6 +9,7 @@
     "code-battle": "apps/code-battle",
     "code-battle-e2e": "apps/code-battle-e2e",
     "common": "libs/common",
+    "message-queue": "libs/message-queue",
     "mocks": "libs/mocks",
     "ui": "libs/ui",
     "ui-websocket": "libs/ui/websocket",
