@@ -5,7 +5,6 @@ import {
   mockedConfigService,
 } from '@code-battle/mocks';
 import { Test } from '@nestjs/testing';
-import { SqsService } from '@ssut/nestjs-sqs';
 import { ConfigService } from '@nestjs/config';
 import { ChallengeRoomService } from './challenge-room.service';
 import { CHALLENGE_ROOM_REPOSIT0RY } from './constants';
@@ -17,8 +16,8 @@ describe('ChallengeRoomService', () => {
   let createRoomSpy: jest.SpyInstance;
   let sendSpy: jest.SpyInstance;
 
-  const mockSqsService = {
-    send: jest.fn(),
+  const mockQueue = {
+    sendEvent: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -31,8 +30,8 @@ describe('ChallengeRoomService', () => {
           useValue: mockChallengeRoomRepository,
         },
         {
-          provide: SqsService,
-          useValue: mockSqsService,
+          provide: 'CHALLENGE_QUEUE',
+          useValue: mockQueue,
         },
         {
           provide: ConfigService,
@@ -49,7 +48,7 @@ describe('ChallengeRoomService', () => {
     }).compile();
 
     createRoomSpy = jest.spyOn(mockChallengeRoomRepository, 'createRoom');
-    sendSpy = jest.spyOn(mockSqsService, 'send');
+    sendSpy = jest.spyOn(mockQueue, 'sendEvent');
 
     challengeRoomService = challengeRoomModule.get(ChallengeRoomService);
   });
@@ -69,7 +68,7 @@ describe('ChallengeRoomService', () => {
       isPrivate: false,
     };
 
-    it('should send sqs message', async () => {
+    it('should send eventBus message', async () => {
       jest
         .spyOn(mockChallengeRoomRepository, 'getActiveRooms')
         .mockResolvedValue([]);
@@ -78,14 +77,14 @@ describe('ChallengeRoomService', () => {
 
       expect(sendSpy).toBeCalledTimes(1);
       expect(sendSpy).toBeCalledWith(
-        'INACTIVE_CHALLENGE_ROOM_QUEUE',
+        'CHALLENGE_QUEUE',
         expect.objectContaining({
           id: expect.any(String),
-          delaySeconds: expect.any(Number),
           body: {
             roomId: '1',
           },
-        })
+        }),
+        { delay: expect.any(Number) }
       );
     });
 

@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService, registerAs } from '@nestjs/config';
+import { ConfigModule, registerAs } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { SqsModule } from '@ssut/nestjs-sqs';
 import { WebsocketModule } from '@code-battle/websocket';
 
 import { ChallengeRoomRepositoryImpl } from './challenge-room.repository';
@@ -11,22 +10,12 @@ import { RemoveChallengeRoomHandler } from './commands';
 import { ChallengeEntity, ChallengeRoomEntity } from './entities';
 
 import {
-  CHALLENGE_QUEUE_CONFIG_TOKEN,
   CHALLENGE_ROOM_REPOSIT0RY,
   CHALLENGE_CONFIG_TOKEN,
   CHALLENGE_REPOSITORY,
 } from './constants';
 import { ChallengeRepositoryImpl } from './challenge.repository';
 import { ChallengeService } from './challenge.service';
-
-const challengeConfig = registerAs(CHALLENGE_QUEUE_CONFIG_TOKEN, () => ({
-  INACTIVE_CHALLENGE_ROOM_QUEUE: process.env.INACTIVE_CHALLENGE_ROOM_QUEUE,
-  INACTIVE_CHALLENGE_ROOM_QUEUE_URL:
-    process.env.INACTIVE_CHALLENGE_ROOM_QUEUE_URL,
-  AWS_REGION: process.env.AWS_REGION,
-  INACTIVE_CHALLENGE_ROOM_IN_SECONDS:
-    process.env.INACTIVE_CHALLENGE_ROOM_IN_SECONDS,
-}));
 
 @Module({
   imports: [
@@ -37,26 +26,6 @@ const challengeConfig = registerAs(CHALLENGE_QUEUE_CONFIG_TOKEN, () => ({
           process.env.INACTIVE_CHALLENGE_ROOM_IN_SECONDS,
       }))
     ),
-    SqsModule.registerAsync({
-      imports: [ConfigModule.forFeature(challengeConfig)],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        producers: [
-          {
-            name: configService.get('INACTIVE_CHALLENGE_ROOM_QUEUE'),
-            queueUrl: configService.get('INACTIVE_CHALLENGE_ROOM_QUEUE_URL'),
-            region: configService.get('AWS_REGION'),
-          },
-        ],
-        consumers: [
-          {
-            name: configService.get('INACTIVE_CHALLENGE_ROOM_QUEUE'),
-            queueUrl: configService.get('INACTIVE_CHALLENGE_ROOM_QUEUE_URL'),
-            region: configService.get('AWS_REGION'),
-          },
-        ],
-      }),
-    }),
     WebsocketModule,
   ],
   providers: [

@@ -1,13 +1,14 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AwsModule } from '@code-battle/aws';
+import { MessageQueueModule } from '@code-battle/message-queue';
+import { ChallengeModule } from './challenge/challenge.module';
+
 import * as Joi from '@hapi/joi';
 import { UserEntity } from '@code-battle/user';
-
 import { AuthModule } from './auth/auth.module';
-import { ChallengeModule } from './challenge/challenge.module';
 import { ChallengeEntity, ChallengeRoomEntity } from '@code-battle/challenge';
-import { AwsModule } from '@code-battle/aws';
 
 @Module({
   imports: [
@@ -52,6 +53,7 @@ import { AwsModule } from '@code-battle/aws';
         secretAccessKey: configService.get('AWS_SECRET_ACCESS_KEY_ID'),
       }),
     }),
+    MessageQueueModule.register(['CHALLENGE_QUEUE']),
     AuthModule,
     ChallengeModule,
   ],
