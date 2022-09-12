@@ -10,7 +10,7 @@ import * as argon from 'argon2';
 
 import { UserService } from '@code-battle/user';
 import {
-  mockedConfigService,
+  mockConfigService,
   mockedJwtService,
   mockUser,
 } from '@code-battle/mocks';
@@ -43,7 +43,7 @@ describe('The AuthenticationService', () => {
           },
         },
         { provide: JwtService, useValue: mockedJwtService },
-        { provide: ConfigService, useValue: mockedConfigService },
+        { provide: ConfigService, useValue: mockConfigService },
       ],
     }).compile();
 

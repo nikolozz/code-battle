@@ -2,7 +2,7 @@ import { ChallengeDuration, ChallengeLevel } from '@code-battle/common';
 import {
   challengeRoomMock,
   mockChallengeRoomRepository,
-  mockedConfigService,
+  mockConfigService,
 } from '@code-battle/mocks';
 import { Test } from '@nestjs/testing';
 import { ConfigService } from '@nestjs/config';
@@ -35,7 +35,7 @@ describe('ChallengeRoomService', () => {
         },
         {
           provide: ConfigService,
-          useValue: mockedConfigService,
+          useValue: mockConfigService,
         },
         {
           provide: ChallengeService,

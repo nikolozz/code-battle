@@ -21,9 +21,10 @@ export class ChallengeEntity implements Challenge {
   @Column({ type: 'uuid', nullable: true })
   challengeRoomId: string;
 
-  @OneToOne(() => ChallengeRoomEntity, (challengeRoom) => challengeRoom.id, {
-    cascade: true,
-  })
+  @OneToOne(
+    () => ChallengeRoomEntity,
+    (challengeRoom) => challengeRoom.challenge
+  )
   @JoinColumn()
   public challengeRoom: ChallengeRoomEntity;
 
