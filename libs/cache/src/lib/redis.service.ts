@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CACHE_PROVIDER_OPTIONS } from './cache.module';
 
 import { createClient, RedisClientType } from 'redis';
 import { CacheClient } from './interfaces/cache-client';
 import { CacheOptions } from './interfaces';
+import { CACHE_PROVIDER_OPTIONS } from './constants';
 
 @Injectable()
 export class CacheService implements CacheClient {

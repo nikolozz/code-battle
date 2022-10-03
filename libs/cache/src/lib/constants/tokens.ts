@@ -1,0 +1,2 @@
+export const CACHE_PROVIDER_OPTIONS = Symbol('CACHE_PROVIDER_OPTIONS');
+export const CACHE_PROVIDER = Symbol('CACHE_PROVIDER');

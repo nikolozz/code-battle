@@ -1,5 +1,5 @@
 import { Inject } from '@nestjs/common';
-import { CACHE_PROVIDER } from '../cache.module';
+import { CACHE_PROVIDER } from '../constants';
 import { CacheClient, CacheDecoratorOptions } from '../interfaces';
 
 export function Cached({ key, ttl }: CacheDecoratorOptions) {

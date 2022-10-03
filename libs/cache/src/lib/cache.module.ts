@@ -1,12 +1,17 @@
-import { DynamicModule, Module, Provider } from '@nestjs/common';
+import {
+  ConfigurableModuleAsyncOptions,
+  DynamicModule,
+  Module,
+  Provider,
+} from '@nestjs/common';
+import { CACHE_PROVIDER, CACHE_PROVIDER_OPTIONS } from './constants';
 import { CacheService } from './redis.service';
-
-export const CACHE_PROVIDER_OPTIONS = 'CACHE_PROVIDER_OPTIONS';
-export const CACHE_PROVIDER = 'CACHE_PROVIDER';
 
 @Module({})
 export class CacheModule {
-  static forRootAsync(options: any): DynamicModule {
+  static forRootAsync(
+    options: ConfigurableModuleAsyncOptions<CacheModule>
+  ): DynamicModule {
     const cacheServiceProvider: Provider = {
       provide: CACHE_PROVIDER,
       useFactory: (options: { connectionString: string }) =>
