@@ -16,7 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@code-battle/auth": ["libs/auth/src/index.ts"],
-      "@code-battle/aws": ["libs/aws/src/index.ts"],
+      "@code-battle/cache": ["libs/cache/src/index.ts"],
       "@code-battle/challenge": ["libs/challenge/src/index.ts"],
       "@code-battle/common": ["libs/common/src/index.ts"],
       "@code-battle/message-queue": ["libs/message-queue/src/index.ts"],

@@ -1,20 +1,20 @@
 {
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/aws/src",
+  "sourceRoot": "libs/cache/src",
   "projectType": "library",
   "targets": {
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/aws/**/*.ts"]
+        "lintFilePatterns": ["libs/cache/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/aws"],
+      "outputs": ["coverage/libs/cache"],
       "options": {
-        "jestConfig": "libs/aws/jest.config.ts",
+        "jestConfig": "libs/cache/jest.config.ts",
         "passWithNoTests": true
       }
     }

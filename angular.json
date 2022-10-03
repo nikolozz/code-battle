@@ -4,7 +4,7 @@
   "projects": {
     "api": "apps/api",
     "auth": "libs/auth",
-    "aws": "libs/aws",
+    "cache": "libs/cache",
     "challenge": "libs/challenge",
     "code-battle": "apps/code-battle",
     "code-battle-e2e": "apps/code-battle-e2e",
