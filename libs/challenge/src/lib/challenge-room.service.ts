@@ -6,6 +6,7 @@ import {
   ChallengeRoom,
   RemoveChallengeRoom,
 } from '@code-battle/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectQueue, Queue } from '@code-battle/message-queue';
 
 import * as uuid from 'uuid';
@@ -24,7 +25,8 @@ export class ChallengeRoomService {
     private readonly cacheManager: CacheClient,
     @InjectQueue('CHALLENGE_QUEUE')
     private readonly challengeQueue: Queue,
-    private readonly challengeService: ChallengeService
+    private readonly challengeService: ChallengeService,
+    private readonly configService: ConfigService
   ) {}
 
   public async createRoom(
@@ -65,7 +67,7 @@ export class ChallengeRoomService {
         },
       },
       {
-        delay: 1000 * 60 * 15,
+        delay: this.configService.get('CHALLENGE_ROOM_DELAY_BEFORE_DELETE'),
       }
     );
 
@@ -76,15 +78,12 @@ export class ChallengeRoomService {
     return this.challengeRoomRepository.getActiveRooms();
   }
 
-  public async removeChallengeRoom(roomId: string): Promise<void> {
-    // TODO Get ChallengeGame -> players from DB and check if challenge room has active user.
-    const isChallengeRoomActive = false;
+  public getChallengeRoom(id: string): Promise<ChallengeRoom> {
+    return this.challengeRoomRepository.getChallengeRoom(id);
+  }
 
-    if (isChallengeRoomActive) {
-      return void 0;
-    }
-
+  public async markRoomAsInactive(id: string): Promise<number> {
     await this.cacheManager.del('activeRooms');
-    await this.challengeRoomRepository.markRoomAsInactive(roomId);
+    return this.challengeRoomRepository.markRoomAsInactive(id);
   }
 }

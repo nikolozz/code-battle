@@ -1,24 +1,34 @@
-import { MessageTypes, RemoveChallengeRoom } from '@code-battle/common';
+import { RemoveChallengeRoom } from '@code-battle/common';
 import { EventMessage, Process } from '@code-battle/message-queue';
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+
 import { ChallengeRoomService } from '../../challenge-room.service';
-import { ChallengeRoomsGateway } from '../../gateways/challenge-room.gateway';
+import { ChallengeStatusService } from '../../challenge-status.service';
 
 @Injectable()
 export class RemoveChallengeRoomHandler {
   constructor(
+    private readonly challengeStatusService: ChallengeStatusService,
     private readonly challengeRoomService: ChallengeRoomService,
-    private readonly challengeRoomGateway: ChallengeRoomsGateway
+    private readonly configService: ConfigService
   ) {}
 
   @Process('CHALLENGE_QUEUE')
   public async challengeRooms(message: EventMessage<RemoveChallengeRoom>) {
     const { data } = message;
 
-    await this.challengeRoomService.removeChallengeRoom(data.body.roomId);
+    const { challenge } = await this.challengeRoomService.getChallengeRoom(
+      data.body.roomId
+    );
 
-    this.challengeRoomGateway.server.emit(MessageTypes.RemoveChallengeRoom, {
-      roomId: data.body.roomId,
-    });
+    if (
+      challenge.players.length > 0 &&
+      challenge.players.length < this.configService.get('MAX_PLAYERS')
+    ) {
+      return void 0;
+    }
+
+    await this.challengeStatusService.removeChallengeRoom(data.body.roomId);
   }
 }

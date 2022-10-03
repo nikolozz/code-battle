@@ -5,4 +5,5 @@ export interface ChallengeRoomRepository {
   getActiveRooms(options?: Partial<GetActiveRooms>): Promise<ChallengeRoom[]>;
   createRoom(userId: number, room: ChallengeRoomCreate): Promise<ChallengeRoom>;
   markRoomAsInactive(roomId: string): Promise<number>;
+  getChallengeRoom(roomId: string): Promise<ChallengeRoom>;
 }

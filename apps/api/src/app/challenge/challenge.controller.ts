@@ -12,7 +12,7 @@ export class ChallengeController {
   public joinChallenge(
     @Param('id') roomId: string,
     @Req() request: RequestWithUser
-  ): Promise<boolean> {
+  ): Promise<number> {
     return this.challengeService.joinChallenge(request.user.id, roomId);
   }
 }

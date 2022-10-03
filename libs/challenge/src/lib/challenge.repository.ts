@@ -20,7 +20,8 @@ export class ChallengeRepositoryImpl implements ChallengeRepository {
 
   public getChallengeByRoomId(id: string): Promise<Challenge> {
     return this.challenge.findOne({
-      where: { challengeRoom: { id } },
+      where: { challengeRoom: { id, active: true } },
+      relations: ['challengeRoom'],
     });
   }
 
@@ -37,7 +38,7 @@ export class ChallengeRepositoryImpl implements ChallengeRepository {
   public async addPlayerToChallenge(
     userId: number,
     challengeId: string
-  ): Promise<boolean> {
+  ): Promise<number> {
     const challenge = await this.getChallenge(challengeId);
 
     if (challenge.players.find((player) => player.id === userId)) {
@@ -52,6 +53,6 @@ export class ChallengeRepositoryImpl implements ChallengeRepository {
       updatedAt: new Date(),
     });
 
-    return !!updateResult;
+    return updateResult.players.length;
   }
 }
