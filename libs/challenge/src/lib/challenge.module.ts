@@ -3,8 +3,7 @@ import { ConfigModule, registerAs } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { WebsocketModule } from '@code-battle/websocket';
 
-import { ChallengeRoomRepositoryImpl } from './challenge-room.repository';
-import { ChallengeRoomService } from './challenge-room.service';
+
 import { ChallengeRoomsGateway } from './gateways';
 import { RemoveChallengeRoomHandler } from './commands';
 import { ChallengeEntity, ChallengeRoomEntity } from './entities';
@@ -16,6 +15,9 @@ import {
 } from './constants';
 import { ChallengeRepositoryImpl } from './challenge.repository';
 import { ChallengeService } from './challenge.service';
+import { ChallengeStatusService } from './challenge-status.service';
+import { ChallengeRoomRepositoryImpl } from './challenge-room.repository';
+import { ChallengeRoomService } from './challenge-room.service';
 
 @Module({
   imports: [
@@ -31,6 +33,7 @@ import { ChallengeService } from './challenge.service';
   providers: [
     ChallengeRoomService,
     ChallengeService,
+    ChallengeStatusService,
     RemoveChallengeRoomHandler,
     {
       provide: CHALLENGE_ROOM_REPOSIT0RY,

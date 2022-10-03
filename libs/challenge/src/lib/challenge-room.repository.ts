@@ -10,8 +10,12 @@ import { ChallengeRoomRepository, GetActiveRooms } from './interfaces';
 export class ChallengeRoomRepositoryImpl implements ChallengeRoomRepository {
   constructor(
     @InjectRepository(ChallengeRoomEntity)
-    private readonly challengeRoom: Repository<ChallengeRoom>
+    private readonly challengeRoom: Repository<ChallengeRoomEntity>
   ) {}
+
+  public getChallengeRoom(id: string): Promise<ChallengeRoom> {
+    return this.challengeRoom.findOne({ where: { id } });
+  }
 
   public markRoomAsInactive(roomId: string): Promise<number> {
     return this.challengeRoom

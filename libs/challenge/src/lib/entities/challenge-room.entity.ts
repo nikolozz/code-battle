@@ -1,5 +1,6 @@
 import {
   BaseUser,
+  Challenge,
   ChallengeDuration,
   ChallengeLevel,
   ChallengeRoom,
@@ -11,8 +12,10 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { ChallengeEntity } from './challenge.entity';
 
 @Entity()
 export class ChallengeRoomEntity implements ChallengeRoom {
@@ -24,6 +27,14 @@ export class ChallengeRoomEntity implements ChallengeRoom {
     enum: ChallengeDuration,
   })
   duration: ChallengeDuration;
+
+  @Column({ type: 'uuid', nullable: true })
+  challengeId: string;
+
+  @OneToOne(() => ChallengeEntity, (challenge) => challenge.challengeRoom, {
+    eager: true,
+  })
+  public challenge: Challenge;
 
   // TODO move as table
   @Column('enum', { enum: ChallengeLevel })
