@@ -1,3 +1,4 @@
+import { Cached } from '@code-battle/cache';
 import { ChallengeRoomService } from '@code-battle/challenge';
 import {
   Body,
@@ -18,6 +19,7 @@ export class ChallengeRoomController {
   constructor(private readonly challengeRoomService: ChallengeRoomService) {}
 
   @Get()
+  @Cached({ key: 'activeRooms' })
   public getChallengeRooms() {
     return this.challengeRoomService.getActiveRooms();
   }

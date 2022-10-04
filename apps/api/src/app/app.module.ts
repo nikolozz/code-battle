@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AwsModule } from '@code-battle/aws';
 import { MessageQueueModule } from '@code-battle/message-queue';
 import { ChallengeModule } from './challenge/challenge.module';
 
@@ -9,6 +8,7 @@ import * as Joi from '@hapi/joi';
 import { UserEntity } from '@code-battle/user';
 import { AuthModule } from './auth/auth.module';
 import { ChallengeEntity, ChallengeRoomEntity } from '@code-battle/challenge';
+import { CacheModule } from '@code-battle/cache';
 
 @Module({
   imports: [
@@ -20,10 +20,8 @@ import { ChallengeEntity, ChallengeRoomEntity } from '@code-battle/challenge';
         POSTGRES_USER: Joi.string().required(),
         POSTGRES_PASSWORD: Joi.string().required(),
         POSTGRES_DB: Joi.string().required(),
-        AWS_ACCESS_KEY_ID: Joi.string().required(),
-        AWS_SECRET_ACCESS_KEY_ID: Joi.string().required(),
-        AWS_REGION: Joi.string().required(),
         PORT: Joi.number(),
+        REDIS_CONNECTION_URL: Joi.string(),
       }),
     }),
     TypeOrmModule.forRootAsync({
@@ -44,16 +42,14 @@ import { ChallengeEntity, ChallengeRoomEntity } from '@code-battle/challenge';
         };
       },
     }),
-    AwsModule.registerAsync({
+    MessageQueueModule.register(['CHALLENGE_QUEUE']),
+    CacheModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        region: configService.get('AWS_REGION'),
-        accessKeyId: configService.get('AWS_ACCESS_KEY_ID'),
-        secretAccessKey: configService.get('AWS_SECRET_ACCESS_KEY_ID'),
+        connectionString: configService.get('REDIS_CONNECTION_URL'),
       }),
     }),
-    MessageQueueModule.register(['CHALLENGE_QUEUE']),
     AuthModule,
     ChallengeModule,
   ],

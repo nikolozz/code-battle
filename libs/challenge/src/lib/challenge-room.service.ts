@@ -14,12 +14,15 @@ import * as uuid from 'uuid';
 import { ChallengeRoomRepository } from './interfaces';
 import { CHALLENGE_ROOM_REPOSIT0RY } from './constants';
 import { ChallengeService } from './challenge.service';
+import { CacheClient, CACHE_PROVIDER } from '@code-battle/cache';
 
 @Injectable()
 export class ChallengeRoomService {
   constructor(
     @Inject(CHALLENGE_ROOM_REPOSIT0RY)
     private readonly challengeRoomRepository: ChallengeRoomRepository,
+    @Inject(CACHE_PROVIDER)
+    private readonly cacheManager: CacheClient,
     @InjectQueue('CHALLENGE_QUEUE')
     private readonly challengeQueue: Queue,
     private readonly challengeService: ChallengeService,
@@ -53,6 +56,8 @@ export class ChallengeRoomService {
       players: [{ id: userId }],
     });
 
+    await this.cacheManager.del('activeRooms');
+
     this.challengeQueue.sendEvent<RemoveChallengeRoom>(
       'CHALLENGE_QUEUE',
       {
@@ -77,7 +82,8 @@ export class ChallengeRoomService {
     return this.challengeRoomRepository.getChallengeRoom(id);
   }
 
-  public markRoomAsInactive(id: string): Promise<number> {
+  public async markRoomAsInactive(id: string): Promise<number> {
+    await this.cacheManager.del('activeRooms');
     return this.challengeRoomRepository.markRoomAsInactive(id);
   }
 }
