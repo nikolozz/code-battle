@@ -37,8 +37,10 @@ export class AuthService {
     } catch (error) {
       // TODO Move to Enum
       if (error?.code === '23505') {
+        const constraint = error?.table === 'users' ? 'username' : 'email';
+
         throw new HttpException(
-          'User with that email already exists',
+          `User with that ${constraint} already exists`,
           HttpStatus.BAD_REQUEST
         );
       }
@@ -55,12 +57,18 @@ export class AuthService {
   ): Promise<User | null> {
     const user = await this.userService.getByEmail(email);
 
+    if (!user) {
+      throw new UnauthorizedException(`Unauthorized error`);
+    }
+
     await this.validatePassword(password, user.password);
 
     return user;
   }
 
-  public async getAuthorizedUserFromToken(token: string): Promise<DBUser | null> {
+  public async getAuthorizedUserFromToken(
+    token: string
+  ): Promise<DBUser | null> {
     const { userId } = this.jwtService.verify(token, {
       secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
     });

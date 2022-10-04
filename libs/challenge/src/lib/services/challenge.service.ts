@@ -1,4 +1,4 @@
-import { Challenge, CreateChallenge } from '@code-battle/common';
+import { Challenge, CreateChallenge, MessageTypes } from '@code-battle/common';
 import {
   BadRequestException,
   ForbiddenException,
@@ -9,6 +9,7 @@ import { ConfigService } from '@nestjs/config';
 import { ChallengeStatusService } from './challenge-status.service';
 import { CHALLENGE_REPOSITORY } from '../constants';
 import { ChallengeRepository } from '../interfaces';
+import { ChallengeRoomsGateway } from '../gateways';
 
 @Injectable()
 export class ChallengeService {
@@ -18,7 +19,8 @@ export class ChallengeService {
     @Inject(CHALLENGE_REPOSITORY)
     private readonly challengeRepository: ChallengeRepository,
     private readonly challengeStatusService: ChallengeStatusService,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    private readonly challengeRoomGateway: ChallengeRoomsGateway
   ) {}
 
   public getChallengeByRoomId(challengeRoomId: string) {
@@ -39,7 +41,7 @@ export class ChallengeService {
     );
 
     if (connectedPlayers === +this.MAX_PLAYERS) {
-      await this.challengeStatusService.removeChallengeRoom(challengeRoomId);
+      await this.startChallenge(challengeRoomId);
     }
 
     return connectedPlayers;
@@ -51,6 +53,14 @@ export class ChallengeService {
 
   public createChallenge(createChallenge: CreateChallenge): Promise<Challenge> {
     return this.challengeRepository.createChallenge(createChallenge);
+  }
+
+  private async startChallenge(challengeRoomId: string): Promise<void> {
+    await this.challengeStatusService.removeChallengeRoom(challengeRoomId);
+
+    this.challengeRoomGateway.server.emit(MessageTypes.RemoveChallengeRoom, {
+      challengeRoomId,
+    });
   }
 
   private validateChallengeRoomJoin(challenge: Challenge, userId: number) {

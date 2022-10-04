@@ -32,6 +32,10 @@ export class DashboardComponent {
   ) {}
 
   public onChallengeRoomSelect(room: DashboardChallengeRoom): void {
+    if (this.dialog.openDialogs.length !== 0) {
+      return;
+    }
+
     if (!this.user) {
       this.dialog.open(AlertComponent, {
         hasBackdrop: false,
@@ -68,6 +72,7 @@ export class DashboardComponent {
     const dialogRef = this.dialog.open(CreateRoomComponent, {
       height: '400px',
       minWidth: '350px',
+      hasBackdrop: false,
     });
 
     dialogRef

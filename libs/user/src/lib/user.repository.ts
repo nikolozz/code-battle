@@ -17,7 +17,7 @@ export class UserRepositoryImpl implements UserRepository {
   }
 
   public getByEmail(email: string): Promise<User | null> {
-    return this.users.findOneByOrFail({ email });
+    return this.users.findOneBy({ email });
   }
 
   public create(user: DBUser): Promise<User> {
