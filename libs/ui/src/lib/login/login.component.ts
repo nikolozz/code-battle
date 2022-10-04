@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
+import { catchError, throwError } from 'rxjs';
 
 import { AuthService } from '../auth.service';
 
@@ -30,15 +31,19 @@ export class LoginComponent {
       password: form.value.password,
     };
 
-    this.authService.signIn(signInData).subscribe(
-      () => {
+    this.authService
+      .signIn(signInData)
+      .pipe(
+        catchError((error) => {
+          this.error = error?.error?.message || 'Unexpected Error Occurred';
+          this.isLoading = false;
+
+          return throwError(() => error);
+        })
+      )
+      .subscribe(() => {
         this.router.navigate(['../home']);
         this.isLoading = false;
-      },
-      (error) => {
-        this.error = error?.error?.message || 'Unexpected Error Occurred';
-        this.isLoading = true;
-      }
-    );
+      });
   }
 }

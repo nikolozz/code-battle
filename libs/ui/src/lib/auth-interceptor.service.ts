@@ -31,7 +31,7 @@ export class AuthInterceptorService implements HttpInterceptor {
 
     return next.handle(modifiedRequest).pipe(
       catchError((error) => {
-        if (error.status === 401) {
+        if (error.status === 401 && !req.url.endsWith('login')) {
           return this.authService.refreshToken().pipe(
             switchMap(() => {
               return next.handle(req);

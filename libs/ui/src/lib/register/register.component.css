@@ -15,3 +15,7 @@
   flex-direction: column;
   padding: 2rem 0;
 }
+
+.alert-text {
+  color: rgba(255, 0, 0, 0.900);
+}

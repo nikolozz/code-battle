@@ -15,6 +15,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
         message: 'Email and Password should be provided',
       });
     }
+
     return this.authenticationService.getAuthorizedUser(email, password);
   }
 }
