@@ -3,8 +3,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindManyOptions, Repository } from 'typeorm';
 
-import { ChallengeRoomEntity } from './entities';
-import { ChallengeRoomRepository, GetActiveRooms } from './interfaces';
+import { ChallengeRoomEntity } from '../entities';
+import { ChallengeRoomRepository, GetActiveRooms } from '../interfaces';
 
 @Injectable()
 export class ChallengeRoomRepositoryImpl implements ChallengeRoomRepository {

@@ -3,8 +3,7 @@ import { EventMessage, Process } from '@code-battle/message-queue';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
-import { ChallengeRoomService } from '../../challenge-room.service';
-import { ChallengeStatusService } from '../../challenge-status.service';
+import { ChallengeRoomService, ChallengeStatusService } from '../../services';
 
 @Injectable()
 export class RemoveChallengeRoomHandler {

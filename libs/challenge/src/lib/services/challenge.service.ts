@@ -7,8 +7,8 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ChallengeStatusService } from './challenge-status.service';
-import { CHALLENGE_REPOSITORY } from './constants';
-import { ChallengeRepository } from './interfaces';
+import { CHALLENGE_REPOSITORY } from '../constants';
+import { ChallengeRepository } from '../interfaces';
 
 @Injectable()
 export class ChallengeService {
@@ -54,14 +54,14 @@ export class ChallengeService {
   }
 
   private validateChallengeRoomJoin(challenge: Challenge, userId: number) {
-    const challengeRoomId = challenge.challengeRoom.id;
-
     if (!challenge) {
-      throw new BadRequestException(`${challengeRoomId} is not active.`);
+      throw new BadRequestException(`Challenge is not active.`);
     } else if (challenge.players?.find((player) => player.id === userId)) {
       throw new BadRequestException(`User ${userId} is already joined.`);
     } else if (challenge.players?.length === this.MAX_PLAYERS) {
-      throw new ForbiddenException(`Room: ${challengeRoomId} is full`);
+      throw new ForbiddenException(
+        `Room: ${challenge?.challengeRoom?.id} is full`
+      );
     } else {
       return void 0;
     }

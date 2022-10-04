@@ -11,8 +11,8 @@ import { InjectQueue, Queue } from '@code-battle/message-queue';
 
 import * as uuid from 'uuid';
 
-import { ChallengeRoomRepository } from './interfaces';
-import { CHALLENGE_ROOM_REPOSIT0RY } from './constants';
+import { ChallengeRoomRepository } from '../interfaces';
+import { CHALLENGE_ROOM_REPOSIT0RY } from '../constants';
 import { ChallengeService } from './challenge.service';
 import { CacheClient, CACHE_PROVIDER } from '@code-battle/cache';
 
