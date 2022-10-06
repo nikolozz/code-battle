@@ -18,9 +18,9 @@ export class ChallengeRepositoryImpl implements ChallengeRepository {
     });
   }
 
-  public getChallengeByRoomId(id: string): Promise<Challenge> {
+  public getChallengeByRoomId(id: string, active = true): Promise<Challenge> {
     return this.challenge.findOne({
-      where: { challengeRoom: { id, active: true } },
+      where: { challengeRoom: { id, active } },
       relations: ['challengeRoom'],
     });
   }

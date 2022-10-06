@@ -19,6 +19,10 @@ export class WebsocketService {
     subject: MessageTypes.RemoveChallengeRoom,
     data: RemoveChallengeRoom
   ): void;
+  public emit(
+    subject: MessageTypes.JoinChallenge,
+    data: { roomId: string }
+  ): void;
   public emit(subject: string, data: string): void;
   public emit(
     subject: string | MessageTypes,

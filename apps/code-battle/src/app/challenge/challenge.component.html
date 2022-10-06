@@ -1,19 +1,28 @@
-<div class="container">
-  <div class="challenge">
-    <div class="challenge-editor">
-      <code-editor (codeChangedEvent)="onCodeChange($event)"></code-editor>
+<ng-template [ngIf]="isGameStarted" [ngIfElse]="loader">
+  <div class="container">
+    <div class="challenge">
+      <div class="challenge-editor">
+        <code-editor (codeChangedEvent)="onCodeChange($event)"></code-editor>
+      </div>
+      <div class="challenge-task">
+        <code-challenge-task></code-challenge-task>
+      </div>
     </div>
-    <div class="challenge-task">
-      <code-challenge-task></code-challenge-task>
-    </div>
-  </div>
 
-  <div class="challenge-buttons">
-    <div>
-      <button mat-raised-button color="primary" class="btn btn-primary" (click)="onSubmit()">Submit</button>
-    </div>
-    <div>
-      <button mat-raised-button color="primary" class="btn btn-success" (click)="onTest()">Test</button>
+    <div class="challenge-buttons">
+      <div>
+        <button mat-raised-button color="primary" class="btn btn-primary" (click)="onSubmit()">Submit</button>
+      </div>
+      <div>
+        <button mat-raised-button color="primary" class="btn btn-success" (click)="onTest()">Test</button>
+      </div>
     </div>
   </div>
-</div>
+</ng-template>
+
+<ng-template #loader>
+  <div class="flex-center">
+    <h1>Waiting for opponent to join</h1>
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>

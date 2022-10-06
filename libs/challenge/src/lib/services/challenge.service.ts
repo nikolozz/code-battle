@@ -1,4 +1,4 @@
-import { Challenge, CreateChallenge, MessageTypes } from '@code-battle/common';
+import { Challenge, CreateChallenge } from '@code-battle/common';
 import {
   BadRequestException,
   ForbiddenException,
@@ -9,7 +9,6 @@ import { ConfigService } from '@nestjs/config';
 import { ChallengeStatusService } from './challenge-status.service';
 import { CHALLENGE_REPOSITORY } from '../constants';
 import { ChallengeRepository } from '../interfaces';
-import { ChallengeRoomsGateway } from '../gateways';
 
 @Injectable()
 export class ChallengeService {
@@ -19,12 +18,14 @@ export class ChallengeService {
     @Inject(CHALLENGE_REPOSITORY)
     private readonly challengeRepository: ChallengeRepository,
     private readonly challengeStatusService: ChallengeStatusService,
-    private readonly configService: ConfigService,
-    private readonly challengeRoomGateway: ChallengeRoomsGateway
+    private readonly configService: ConfigService
   ) {}
 
-  public getChallengeByRoomId(challengeRoomId: string) {
-    return this.challengeRepository.getChallengeByRoomId(challengeRoomId);
+  public getChallengeByRoomId(challengeRoomId: string, active?: boolean) {
+    return this.challengeRepository.getChallengeByRoomId(
+      challengeRoomId,
+      active
+    );
   }
 
   public async joinChallenge(
@@ -40,7 +41,7 @@ export class ChallengeService {
       challenge.id
     );
 
-    if (connectedPlayers === +this.MAX_PLAYERS) {
+    if (this.isMaxPlayersReached(connectedPlayers)) {
       await this.startChallenge(challengeRoomId);
     }
 
@@ -55,12 +56,12 @@ export class ChallengeService {
     return this.challengeRepository.createChallenge(createChallenge);
   }
 
+  public isMaxPlayersReached(playersCount: number) {
+    return playersCount <= +this.MAX_PLAYERS;
+  }
+
   private async startChallenge(challengeRoomId: string): Promise<void> {
     await this.challengeStatusService.removeChallengeRoom(challengeRoomId);
-
-    this.challengeRoomGateway.server.emit(MessageTypes.RemoveChallengeRoom, {
-      challengeRoomId,
-    });
   }
 
   private validateChallengeRoomJoin(challenge: Challenge, userId: number) {

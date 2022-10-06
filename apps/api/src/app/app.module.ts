@@ -36,8 +36,7 @@ import { CacheModule } from '@code-battle/cache';
           password: configService.get('POSTGRES_PASSWORD'),
           database: configService.get('POSTGRES_DB'),
           synchronize: true,
-          logging:
-            configService.get('NODE_ENV') === 'development' ? true : false,
+          logging: false,
           entities: [UserEntity, ChallengeRoomEntity, ChallengeEntity],
         };
       },

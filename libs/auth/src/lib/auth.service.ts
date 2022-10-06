@@ -66,9 +66,7 @@ export class AuthService {
     return user;
   }
 
-  public async getAuthorizedUserFromToken(
-    token: string
-  ): Promise<DBUser | null> {
+  public async getAuthorizedUserFromToken(token: string): Promise<DBUser | null> {
     const { userId } = this.jwtService.verify(token, {
       secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
     });
