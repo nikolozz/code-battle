@@ -21,11 +21,12 @@ export class ChallengeService {
     private readonly configService: ConfigService
   ) {}
 
-  public getChallengeByRoomId(challengeRoomId: string, active?: boolean) {
-    return this.challengeRepository.getChallengeByRoomId(
-      challengeRoomId,
-      active
-    );
+  public getChallengeByRoomId(challengeRoomId: string): Promise<Challenge> {
+    return this.challengeRepository.getChallengeByRoomId(challengeRoomId);
+  }
+
+  public getChallengeByUser(userId: number): Promise<Challenge> {
+    return this.challengeRepository.getChallengeByUser(userId);
   }
 
   public async joinChallenge(
@@ -33,6 +34,8 @@ export class ChallengeService {
     challengeRoomId: string
   ): Promise<number> {
     const challenge = await this.getChallengeByRoomId(challengeRoomId);
+
+    // TODO: Check if user is already joined in another challenge
 
     this.validateChallengeRoomJoin(challenge, userId);
 
@@ -57,7 +60,7 @@ export class ChallengeService {
   }
 
   public isMaxPlayersReached(playersCount: number) {
-    return playersCount <= +this.MAX_PLAYERS;
+    return playersCount >= +this.MAX_PLAYERS;
   }
 
   private async startChallenge(challengeRoomId: string): Promise<void> {

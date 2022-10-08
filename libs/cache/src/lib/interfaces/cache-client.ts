@@ -1,11 +1,7 @@
-import { CacheDecoratorOptions } from './cache-options.interface';
+import { CacheOptions } from './cache-options.interface';
 
 export interface CacheClient {
-  get(key: string): Promise<string>;
+  get<T>(key: string): Promise<T>;
+  set<T>(key: string, value: T, options?: CacheOptions): Promise<void>;
   del(key: string): Promise<number>;
-  set(
-    key: string,
-    value: any,
-    options?: Omit<CacheDecoratorOptions, 'key'>
-  ): Promise<string>;
 }
