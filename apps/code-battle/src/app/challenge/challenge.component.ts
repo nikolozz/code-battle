@@ -16,8 +16,10 @@ export class ChallengeComponent implements OnInit, OnDestroy {
   private roomId?: string;
 
   private gameResultSubscription?: Subscription;
+  private startChallengeSubscription?: Subscription;
 
   public gameResult?: string;
+  public isGameStarted = false;
 
   public constructor(
     private readonly challengeService: ChallengeService,
@@ -26,7 +28,6 @@ export class ChallengeComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit(): void {
-    // TODO RxJS pipe map to send WIN or LOSE in uppercase
     this.gameResultSubscription = this.challengeService
       .getGameResult()
       .pipe(map((result) => (result === 'win' ? 'You won!' : 'You Lose')))
@@ -34,13 +35,21 @@ export class ChallengeComponent implements OnInit, OnDestroy {
         this.gameResult = result as string;
       });
 
+    this.startChallengeSubscription = this.challengeService
+      .startChallenge()
+      .subscribe(() => {
+        this.isGameStarted = true;
+      });
+
     this.activatedRoute.params.subscribe((params) => {
+      this.challengeService.joinChallenge(params['id']);
       this.roomId = params['id'];
     });
   }
 
   public ngOnDestroy(): void {
     this.gameResultSubscription?.unsubscribe();
+    this.startChallengeSubscription?.unsubscribe();
   }
 
   public onTest(): void {

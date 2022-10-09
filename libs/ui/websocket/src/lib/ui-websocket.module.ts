@@ -5,7 +5,10 @@ import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { WebsocketService } from './websocket.service';
 
 // TODO change to factory method
-const config: SocketIoConfig = { url: 'http://localhost:4445' };
+const config: SocketIoConfig = {
+  url: 'http://localhost:4445',
+  options: { withCredentials: true },
+};
 
 @NgModule({
   imports: [CommonModule, SocketIoModule.forRoot(config)],

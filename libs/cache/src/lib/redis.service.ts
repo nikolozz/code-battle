@@ -21,11 +21,18 @@ export class CacheService implements CacheClient {
     return this.redisClient.del(key);
   }
 
-  get(key: string): Promise<string> {
-    return this.redisClient.get(key);
+  async get<T>(key: string): Promise<T> {
+    const storedValue = await this.redisClient.get(key);
+
+    return storedValue === 'string' ? storedValue : JSON.parse(storedValue);
   }
 
-  set(key: string, value: string, options: CacheOptions): Promise<string> {
-    return this.redisClient.set(key, value, { EX: options?.ttl });
+  async set<T>(key: string, value: T, options: CacheOptions): Promise<void> {
+    const stringifiedValue =
+      typeof value === 'string' ? value : JSON.stringify(value);
+
+    await this.redisClient.set(key, stringifiedValue, { EX: options?.ttl });
+
+    return void 0;
   }
 }

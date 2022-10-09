@@ -1,10 +1,11 @@
 import { Challenge, User as BaseUser } from '@code-battle/common';
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import { Min } from 'class-validator';
 import { Roles } from '../enums';
 
 export type DBUser = Omit<BaseUser, 'id'> & {
+  id?: number;
   roles: Roles[];
   hashedRefreshToken?: string;
   rank?: number;
@@ -37,7 +38,7 @@ class UserEntity implements DBUser {
   @Exclude()
   public hashedRefreshToken?: string | null;
 
-  @ManyToMany('ChallengeEntity', 'players', { nullable: true })
+  @ManyToOne('ChallengeEntity', 'players', { nullable: true })
   public challenges: Challenge[];
 }
 

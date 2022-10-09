@@ -1,8 +1,9 @@
 import { Challenge, CreateChallenge } from '@code-battle/common';
+import { UserEntity } from '@code-battle/user';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ChallengeEntity } from '../entities';
+import { ChallengeEntity, ChallengeRoomEntity } from '../entities';
 import { ChallengeRepository } from '../interfaces';
 
 @Injectable()
@@ -11,25 +12,41 @@ export class ChallengeRepositoryImpl implements ChallengeRepository {
     @InjectRepository(ChallengeEntity)
     private readonly challenge: Repository<ChallengeEntity>
   ) {}
-
   public getChallenge(id: string): Promise<Challenge> {
     return this.challenge.findOne({
       where: { id },
     });
   }
 
-  public getChallengeByRoomId(id: string): Promise<Challenge> {
+  public getChallengeByUser(userId: number): Promise<Challenge> {
     return this.challenge.findOne({
-      where: { challengeRoom: { id, active: true } },
-      relations: ['challengeRoom'],
+      where: { players: { id: userId } },
     });
+  }
+
+  public async getChallengeByRoomId(id: string): Promise<Challenge> {
+    return this.challenge
+      .createQueryBuilder('challenge')
+      .leftJoinAndMapOne(
+        'challenge.challengeRoom',
+        ChallengeRoomEntity,
+        'cr',
+        '"challenge"."challengeRoomId" = "cr"."id"'
+      )
+      .leftJoinAndMapMany(
+        'challenge.players',
+        UserEntity,
+        'u',
+        '"challenge"."id"  = "u"."challengesId"'
+      )
+      .where('"challenge"."challengeRoomId" = :id', { id })
+      .getOne();
   }
 
   public async createChallenge(
     createChallenge: CreateChallenge
   ): Promise<Challenge> {
     const createdChallenge = this.challenge.create(createChallenge);
-
     await this.challenge.save(createChallenge);
 
     return createdChallenge;

@@ -16,11 +16,11 @@ export function Cached({ key, ttl }: CacheDecoratorOptions) {
       const hit = await cacheService.get(key);
 
       if (hit) {
-        return JSON.parse(hit);
+        return hit;
       }
 
       const result = await originalMethod.apply(this, args);
-      await cacheService.set(key, JSON.stringify(result), { ttl });
+      await cacheService.set(key, result, { ttl });
 
       return result;
     };

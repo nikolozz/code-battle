@@ -37,7 +37,9 @@ export class AuthService {
     } catch (error) {
       // TODO Move to Enum
       if (error?.code === '23505') {
-        const constraint = error?.table === 'users' ? 'username' : 'email';
+        const constraint = error?.detail?.split('=')[0]?.includes('email')
+          ? 'email'
+          : 'username';
 
         throw new HttpException(
           `User with that ${constraint} already exists`,

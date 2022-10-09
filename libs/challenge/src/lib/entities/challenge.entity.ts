@@ -6,14 +6,14 @@ import {
   Entity,
   JoinColumn,
   JoinTable,
-  ManyToMany,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { ChallengeRoomEntity } from './challenge-room.entity';
 
-@Entity()
+@Entity('challenge')
 export class ChallengeEntity implements Challenge {
   @PrimaryGeneratedColumn('uuid')
   public id: string;
@@ -28,7 +28,7 @@ export class ChallengeEntity implements Challenge {
   @JoinColumn()
   public challengeRoom: ChallengeRoomEntity;
 
-  @ManyToMany('UserEntity', 'challenges', { eager: true, cascade: ['update'] })
+  @OneToMany('UserEntity', 'challenges', { eager: true, cascade: ['update'] })
   @JoinTable()
   public players: BaseUser[];
 
