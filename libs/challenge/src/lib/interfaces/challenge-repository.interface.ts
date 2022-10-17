@@ -6,4 +6,5 @@ export interface ChallengeRepository {
   getChallengeByUser(id: number): Promise<Challenge>;
   createChallenge(createChallenge: CreateChallenge): Promise<Challenge>;
   addPlayerToChallenge(userId: number, challengeId: string): Promise<number>;
+  markChallengeAsStarted(id: string): Promise<boolean>
 }

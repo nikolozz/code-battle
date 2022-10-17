@@ -45,7 +45,7 @@ export class ChallengeService {
     );
 
     if (this.isMaxPlayersReached(connectedPlayers)) {
-      await this.startChallenge(challengeRoomId);
+      await this.startChallenge(challenge.id, challengeRoomId);
     }
 
     return connectedPlayers;
@@ -59,11 +59,19 @@ export class ChallengeService {
     return this.challengeRepository.createChallenge(createChallenge);
   }
 
+  public markChallengeAsStarted(id: string): Promise<boolean> {
+    return this.challengeRepository.markChallengeAsStarted(id);
+  }
+
   public isMaxPlayersReached(playersCount: number) {
     return playersCount >= +this.MAX_PLAYERS;
   }
 
-  private async startChallenge(challengeRoomId: string): Promise<void> {
+  private async startChallenge(
+    challengeId: string,
+    challengeRoomId: string
+  ): Promise<void> {
+    await this.markChallengeAsStarted(challengeId);
     await this.challengeStatusService.removeChallengeRoom(challengeRoomId);
   }
 

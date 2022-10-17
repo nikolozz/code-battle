@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { catchError, throwError } from 'rxjs';
+import { MessageTypes } from '@code-battle/common';
+import { WebsocketService } from '@code-battle/ui/websocket';
+import { catchError, tap, throwError } from 'rxjs';
 
 import { AuthService } from '../auth.service';
 
@@ -13,7 +15,8 @@ import { AuthService } from '../auth.service';
 export class LoginComponent {
   constructor(
     private readonly authService: AuthService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly wsService: WebsocketService
   ) {}
 
   public error?: string;
@@ -39,6 +42,9 @@ export class LoginComponent {
           this.isLoading = false;
 
           return throwError(() => error);
+        }),
+        tap(() => {
+          this.wsService.emit(MessageTypes.Reconnect);
         })
       )
       .subscribe(() => {

@@ -23,10 +23,11 @@ export class WebsocketService {
     subject: MessageTypes.JoinChallenge,
     data: { roomId: string }
   ): void;
+  public emit(subject: MessageTypes.Reconnect): void;
   public emit(subject: string, data: string): void;
   public emit(
     subject: string | MessageTypes,
-    data: string | DashboardChallengeRoom | RemoveChallengeRoom
+    data?: string | DashboardChallengeRoom | RemoveChallengeRoom | undefined
   ): void {
     this.socket.emit(subject, data);
   }
