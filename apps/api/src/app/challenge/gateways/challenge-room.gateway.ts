@@ -39,14 +39,33 @@ export class ChallengeRoomsGateway {
     client.broadcast.emit(MessageTypes.ChallengeRoomCreated, data);
   }
 
+  public async handleConnection(client: Socket): Promise<void> {
+    try {
+      const user = await this.webSocketService.getUserFromWebsocket(client);
+      console.log('User: ', user.id, ' is connected');
+
+      await this.cacheManager.set(user.id + '', client.id);
+
+      return void 0;
+    } catch (error) {
+      if (error instanceof WsException) {
+        client.emit(MessageTypes.Unauthorized, {
+          status: 403,
+          error: 'Not Authorized',
+        });
+      }
+    }
+  }
+
   public async handleDisconnect(client: Socket): Promise<void> {
     try {
       const user = await this.webSocketService.getUserFromWebsocket(client);
+      await this.cacheManager.del(user.id + '');
 
       const challenge = await this.challengeService.getChallengeByUser(
         +user.id
       );
-
+      // TODO make game over
       if (challenge) {
         console.log(`User ${user.id} left the challenge`);
       }
@@ -59,6 +78,14 @@ export class ChallengeRoomsGateway {
   }
 
   @UseFilters(new WSExceptionsFilter())
+  @SubscribeMessage(MessageTypes.Reconnect)
+  public async handleReconnect(@ConnectedSocket() client: Socket) {
+    const user = await this.webSocketService.getUserFromWebsocket(client);
+
+    await this.cacheManager.set(user.id + '', client.id);
+  }
+
+  @UseFilters(new WSExceptionsFilter())
   @SubscribeMessage(MessageTypes.JoinChallenge)
   public async handleJoinChallenge(
     @MessageBody() data: { roomId: string },
@@ -66,36 +93,28 @@ export class ChallengeRoomsGateway {
   ) {
     await this.webSocketService.getUserFromWebsocket(client);
 
-    const room = await this.challengeService.getChallengeByRoomId(data.roomId);
+    const challenge = await this.challengeService.getChallengeByRoomId(
+      data.roomId
+    );
 
-    if (!room) {
+    if (!challenge) {
       throw new WsException('Cannot find room');
     }
 
-    const cachedRoom = await this.cacheManager.get<string[]>(data.roomId);
+    const joinedPlayers = challenge.players.map((player) => player.id);
 
-    if (!cachedRoom) {
-      await this.cacheManager.set(data.roomId, [
-        ...(cachedRoom || []),
-        client.id,
-      ]);
-    }
+    const currentPlayerSocketIds = await Promise.all(
+      joinedPlayers.map((id) => this.cacheManager.get<string>(id + ''))
+    );
 
-    const connectedSockets = await this.cacheManager.get<string[]>(data.roomId);
+    if (this.challengeService.isMaxPlayersReached(joinedPlayers.length)) {
+      this.server.emit(MessageTypes.RemoveChallengeRoom, {
+        roomId: data.roomId,
+      });
 
-    if (this.challengeService.isMaxPlayersReached(connectedSockets?.length)) {
-      throw new WsException('Room is full');
-    }
-
-    client.join(data.roomId);
-    await this.cacheManager.set(data.roomId, [
-      ...(cachedRoom || []),
-      client.id,
-    ]);
-
-    const currentPlayers = await this.cacheManager.get<string[]>(data.roomId);
-    if (this.challengeService.isMaxPlayersReached(currentPlayers.length)) {
-      return this.server.to(data.roomId).emit(MessageTypes.StartChallenge);
+      for (const socketId of currentPlayerSocketIds) {
+        this.server.to(socketId).emit(MessageTypes.StartChallenge);
+      }
     }
   }
 }

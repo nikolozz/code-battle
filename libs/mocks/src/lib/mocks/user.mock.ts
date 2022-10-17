@@ -3,4 +3,5 @@ export const mockUser = {
   email: 'test@test.com',
   username: 'username',
   password: 'password123',
+  hashedRefreshToken: 'dfhafhurh394h2jfJEFHEFs'
 };

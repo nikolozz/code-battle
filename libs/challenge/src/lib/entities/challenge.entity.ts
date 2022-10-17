@@ -39,6 +39,9 @@ export class ChallengeEntity implements Challenge {
   @Column({ type: 'int', nullable: true })
   public winnerId: number;
 
+  @Column({ type: 'bool', default: false, nullable: true })
+  public isChallengeStarted: boolean;
+
   @CreateDateColumn()
   public createdAt: Date;
 

@@ -12,6 +12,7 @@ export class ChallengeRepositoryImpl implements ChallengeRepository {
     @InjectRepository(ChallengeEntity)
     private readonly challenge: Repository<ChallengeEntity>
   ) {}
+
   public getChallenge(id: string): Promise<Challenge> {
     return this.challenge.findOne({
       where: { id },
@@ -71,5 +72,11 @@ export class ChallengeRepositoryImpl implements ChallengeRepository {
     });
 
     return updateResult.players.length;
+  }
+
+  public markChallengeAsStarted(id: string): Promise<boolean> {
+    return this.challenge
+      .update({ id }, { isChallengeStarted: true })
+      .then((value) => !!value.affected);
   }
 }

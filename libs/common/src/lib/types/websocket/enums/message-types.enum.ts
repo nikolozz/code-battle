@@ -4,4 +4,6 @@ export enum MessageTypes {
   RemoveChallengeRoom = 'REMOVE_CHALLENGE_ROOM',
   StartChallenge = 'START_CHALLENGE',
   JoinChallenge = 'JOIN_CHALLENGE',
+  Reconnect = 'RECONNECT',
+  Unauthorized = 'UNAUTHORIZED'
 }

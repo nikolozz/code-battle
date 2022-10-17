@@ -6,7 +6,7 @@ export interface Challenge {
   challengeRoom: ChallengeRoom;
   players: BaseUser[];
   winner: BaseUser;
-  winnerId: number;
+  isChallengeStarted: boolean;
   createdAt: Date;
   updatedAt: Date;
 }

@@ -22,9 +22,17 @@ export class CacheService implements CacheClient {
   }
 
   async get<T>(key: string): Promise<T> {
-    const storedValue = await this.redisClient.get(key);
+    const storedValue = await this.redisClient.get(key.toString());
 
-    return storedValue === 'string' ? storedValue : JSON.parse(storedValue);
+    let value: any;
+
+    try {
+      value = JSON.parse(storedValue);
+    } catch (error) {
+      value = storedValue;
+    }
+
+    return value;
   }
 
   async set<T>(key: string, value: T, options: CacheOptions): Promise<void> {
