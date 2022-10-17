@@ -108,6 +108,10 @@ export class ChallengeRoomsGateway {
     );
 
     if (this.challengeService.isMaxPlayersReached(joinedPlayers.length)) {
+      this.server.emit(MessageTypes.RemoveChallengeRoom, {
+        roomId: data.roomId,
+      });
+
       for (const socketId of currentPlayerSocketIds) {
         this.server.to(socketId).emit(MessageTypes.StartChallenge);
       }

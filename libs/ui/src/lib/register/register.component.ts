@@ -40,7 +40,7 @@ export class RegisterComponent {
       .signUp(user)
       .pipe(
         tap(() => {
-          this.wsService.emit(MessageTypes.Reconnect);
+          this.wsService.emit(MessageTypes.Reconnect, '');
         })
       )
       .subscribe(

@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
-import { catchError, map, Subscription, tap, throwError } from 'rxjs';
+import { catchError, map, Subscription, throwError } from 'rxjs';
 import { HomeService } from './home.service';
 import { AlertComponent, AuthService } from '@code-battle/ui';
 import {
@@ -32,8 +32,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   private createChallengeRoomSub?: Subscription;
   private challengeRoomCreatedSub?: Subscription;
   private challengeRoomRemovedSub?: Subscription;
-
-  private handleWsUnauthorizedSub?: Subscription;
 
   constructor(
     private readonly homeService: HomeService,
@@ -82,17 +80,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       .subscribe((data) => {
         this.rooms = this.rooms.filter((room) => room.id !== data.roomId);
       });
-
-    this.handleWsUnauthorizedSub = this.wsService
-      .fromEvent(MessageTypes.Unauthorized)
-      .pipe(
-        tap(() => {
-          if (localStorage.getItem('user')) {
-            this.wsService.emit(MessageTypes.Reconnect, '');
-          }
-        })
-      )
-      .subscribe();
   }
 
   public async onCreateRoom(event: ChallengeRoomCreate): Promise<void> {
@@ -141,6 +128,5 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.createChallengeRoomSub?.unsubscribe();
     this.challengeRoomCreatedSub?.unsubscribe();
     this.challengeRoomRemovedSub?.unsubscribe();
-    this.handleWsUnauthorizedSub?.unsubscribe();
   }
 }

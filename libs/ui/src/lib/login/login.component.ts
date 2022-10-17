@@ -44,7 +44,7 @@ export class LoginComponent {
           return throwError(() => error);
         }),
         tap(() => {
-          this.wsService.emit(MessageTypes.Reconnect);
+          this.wsService.emit(MessageTypes.Reconnect, '');
         })
       )
       .subscribe(() => {

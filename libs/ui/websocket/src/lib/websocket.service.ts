@@ -23,12 +23,20 @@ export class WebsocketService {
     subject: MessageTypes.JoinChallenge,
     data: { roomId: string }
   ): void;
-  public emit(subject: MessageTypes.Reconnect): void;
+  public emit(subject: MessageTypes.Reconnect, data: string): void;
   public emit(subject: string, data: string): void;
   public emit(
     subject: string | MessageTypes,
-    data?: string | DashboardChallengeRoom | RemoveChallengeRoom | undefined
+    data: string | DashboardChallengeRoom | RemoveChallengeRoom | undefined
   ): void {
+    if (subject === MessageTypes.Reconnect) {
+      this.socket.disconnect();
+      this.socket.connect();
+
+      this.socket.emit(subject, data);
+
+      return void 0;
+    }
     this.socket.emit(subject, data);
   }
 
