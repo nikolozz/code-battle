@@ -28,6 +28,12 @@ export class ChallengeRepositoryImpl implements ChallengeRepository {
   public async getChallengeByRoomId(id: string): Promise<Challenge> {
     return this.challenge
       .createQueryBuilder('challenge')
+      .select([
+        'challenge.id',
+        'challenge.challengeRoomId',
+        'challenge.challengeRoomId',
+        'challenge.isChallengeStarted',
+      ])
       .leftJoinAndMapOne(
         'challenge.challengeRoom',
         ChallengeRoomEntity,
