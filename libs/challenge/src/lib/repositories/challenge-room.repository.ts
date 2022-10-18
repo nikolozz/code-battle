@@ -1,10 +1,10 @@
 import { ChallengeRoomCreate, ChallengeRoom } from '@code-battle/common';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindManyOptions, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 
 import { ChallengeRoomEntity } from '../entities';
-import { ChallengeRoomRepository, GetActiveRooms } from '../interfaces';
+import { ChallengeRoomRepository } from '../interfaces';
 
 @Injectable()
 export class ChallengeRoomRepositoryImpl implements ChallengeRoomRepository {
@@ -23,19 +23,23 @@ export class ChallengeRoomRepositoryImpl implements ChallengeRoomRepository {
       .then((result) => result.affected);
   }
 
-  public getActiveRooms(options: GetActiveRooms): Promise<ChallengeRoom[]> {
-    const findOptions: FindManyOptions<ChallengeRoom> = {
-      where: { active: true },
-    };
+  public getActiveRooms(): Promise<ChallengeRoom[]> {
+    const queryBuilder = this.challengeRoom
+      .createQueryBuilder('challengeRoom')
+      .select([
+        'challengeRoom.id',
+        'challengeRoom.duration',
+        'challengeRoom.challengeId',
+        'challengeRoom.level',
+        'challengeRoom.active',
+      ])
+      .leftJoinAndSelect('challengeRoom.challenge', 'challenge');
 
-    if (options?.userId) {
-      findOptions.where = {
-        ...findOptions.where,
-        createdBy: { id: options.userId },
-      };
-    }
+    queryBuilder
+      .where('challengeRoom.active = :active', { active: true })
+      .andWhere('challengeRoom.isPrivate = :isPrivate', { isPrivate: false });
 
-    return this.challengeRoom.find(findOptions);
+    return queryBuilder.getMany();
   }
 
   public async createRoom(
